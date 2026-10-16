@@ -1,0 +1,57 @@
+spring:
+  application:
+    name: batchstarter
+  batch:
+    jdbc:
+      initialize-schema: always
+    job:
+      enabled: true
+  datasource:
+    url: jdbc:h2:mem:batchdb
+    username: sa
+    password:
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics
+  endpoint:
+    health:
+      show-details: always
+
+generator:
+  output-directory: ./data/output
+  customers:
+    count: 100000
+    min-age: 18
+    max-age: 80
+    minor-rate: 10
+    major-rate: 70
+  accounts:
+    checking-rate: 70
+    savings-rate: 25
+    business-rate: 5
+    active-rate: 95
+    blocked-rate: 3
+    closed-rate: 2
+    min-balance: 100
+    max-balance: 50000
+    max-opening-age-in-days: 3650
+  transactions:
+    count: 5000000
+    card-payment-rate: 80
+    transfer-rate: 10
+    direct-debit-rate: 5
+    cash-withdrawal-rate: 5
+    completed-rate: 95
+    pending-rate: 4
+    rejected-rate: 1
+    high-amount-fraud-rate: 0.002
+  countries:
+    FR: 30
+    DE: 20
+    UK: 15
+    US: 15
+    ES: 10
+    IT: 10
