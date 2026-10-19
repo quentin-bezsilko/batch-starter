@@ -1,8 +1,8 @@
 package com.qbe.batchstarter.service;
 
 import com.qbe.batchstarter.dto.BankAccountDto;
+import com.qbe.batchstarter.dto.BankTransactionDto;
 import com.qbe.batchstarter.dto.MerchantReference;
-import com.qbe.batchstarter.dto.TransactionDto;
 import com.qbe.batchstarter.enums.TransactionStatus;
 import com.qbe.batchstarter.enums.TransactionType;
 import com.qbe.batchstarter.properties.TransactionGeneratorProperties;
@@ -21,8 +21,8 @@ public class TransactionGeneratorService {
 
     private final Random random = new Random();
 
-    public TransactionDto generate(long transactionId, BankAccountDto account, MerchantReference merchant) {
-        return new TransactionDto(
+    public BankTransactionDto generate(long transactionId, BankAccountDto account, MerchantReference merchant) {
+        return new BankTransactionDto(
                 transactionId,
                 account.id(),
                 randomTransactionDate(),

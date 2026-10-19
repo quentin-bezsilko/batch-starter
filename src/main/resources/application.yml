@@ -1,15 +1,18 @@
 spring:
+  main:
+    web-application-type: none
   application:
     name: batchstarter
   batch:
     jdbc:
-      initialize-schema: always
+      initialize-schema: never
     job:
-      enabled: true
+      name: dataWorkflowJob
   datasource:
-    url: jdbc:h2:mem:batchdb
-    username: sa
-    password:
+    url: jdbc:oracle:thin:@localhost:1521/XEPDB1
+    username: batchuser
+    password: batchpassword
+    driver-class-name: oracle.jdbc.OracleDriver
 
 management:
   endpoints:
@@ -22,6 +25,9 @@ management:
 
 generator:
   output-directory: ./data/output
+  customer-file-name: /customers.csv
+  account-file-name: /accounts.csv
+  transaction-file-name: /transactions.csv
   customers:
     count: 100000
     min-age: 18
@@ -39,7 +45,7 @@ generator:
     max-balance: 50000
     max-opening-age-in-days: 3650
   transactions:
-    count: 5000000
+    count: 1000000
     card-payment-rate: 80
     transfer-rate: 10
     direct-debit-rate: 5
@@ -55,3 +61,6 @@ generator:
     US: 15
     ES: 10
     IT: 10
+  logging:
+    level:
+      org.springframework.batch: INFO

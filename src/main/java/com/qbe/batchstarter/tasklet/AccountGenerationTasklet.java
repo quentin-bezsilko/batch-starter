@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.StepContribution;
@@ -29,7 +30,8 @@ public class AccountGenerationTasklet implements Tasklet {
     private final GeneratorProperties generatorProperties;
 
     @Override
-    public @Nullable RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
+    public @Nullable RepeatStatus execute(@NonNull StepContribution contribution, @NonNull ChunkContext chunkContext)
+            throws Exception {
         log.info("Starting account generation...");
 
         if (generatorContext.getCustomers() == null) {

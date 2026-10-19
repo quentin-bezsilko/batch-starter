@@ -58,7 +58,7 @@ Sprint 3 (ok)
 ✅ Logs
 ✅ Temps de génération
 
-Sprint 4
+Sprint 4 (ok)
 ✅ Oracle
 ✅ Tables SQL
 ✅ Import BatchJdbcItemWriter
@@ -87,7 +87,6 @@ Sprint 7
 Sprint 8 :
 ✅ Tests unitaires complets
 ✅ Endpoint /api/batch/status
-✅ Endpoint /api/batch/status
 
 
 Plusieurs points importants validés :
@@ -95,15 +94,10 @@ Plusieurs points importants validés :
 ✅ Chargement des référentiels CSV
 ✅ Tirage aléatoire pondéré
 ✅ Association cohérente prénom/nom/pays
-✅ Écriture du fichier CSV
 ✅ Premier batch de génération des CSV OK
+✅ Second batch écriture des CSV en BDD OK
 
-TODO (cf. sprint 4) :
-- Créer Dockerfile et docker-compose.yml avec une BDD Oracle
-- Créer un liquibase qui permet de créer les tables en amont
-- Insérer les données dans une BDD Oracle
-- 
-
-
-Compiler avec mvn spotless:apply && mvn clean install
-Lancer avec java -jar target/batch-demo-0.0.1-SNAPSHOT.jar
+TODO :
+- Créer tous les TU, plugin Jacoco avant de démarrer sprint 5
+- Paramétrer l'application avec un fichier .env
+- Reprendre sprint 5

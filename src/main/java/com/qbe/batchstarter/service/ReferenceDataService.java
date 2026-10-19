@@ -81,27 +81,22 @@ public class ReferenceDataService {
 
     private void loadFirstNames(String country) {
         String filename = String.format("reference-data/firstnames/firstnames_%s.csv", country.toLowerCase());
-
         firstNamesByCountry.put(country, loadSingleColumnFile(filename));
     }
 
     private void loadLastNames(String country) {
         String filename = String.format("reference-data/lastnames/lastnames_%s.csv", country.toLowerCase());
-
         lastNamesByCountry.put(country, loadSingleColumnFile(filename));
     }
 
     private List<String> loadSingleColumnFile(String fileName) {
-
         try (BufferedReader reader = new BufferedReader(
                 new InputStreamReader(new ClassPathResource(fileName).getInputStream(), StandardCharsets.UTF_8))) {
-
             return reader.lines()
                     .skip(1)
                     .map(String::trim)
                     .filter(line -> !line.isBlank())
                     .toList();
-
         } catch (Exception e) {
             throw new IllegalStateException("Unable to load file: " + fileName, e);
         }

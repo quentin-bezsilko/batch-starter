@@ -1,6 +1,6 @@
 package com.qbe.batchstarter.writer;
 
-import com.qbe.batchstarter.dto.TransactionDto;
+import com.qbe.batchstarter.dto.BankTransactionDto;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -10,15 +10,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CsvTransactionWriter {
-    public void write(List<TransactionDto> transactions, Path path) throws IOException {
+    public void write(List<BankTransactionDto> transactions, Path path) throws IOException {
         try (BufferedWriter writer = Files.newBufferedWriter(path)) {
-            writer.write(
-                    """
-                    id,accountId,transactionDate,transactionType,amount,merchantName,currency,transactionStatus
-                    """
-                            .trim());
+            writer.write("id,accountId,transactionDate,transactionType,amount,merchantName,currency,transactionStatus"
+                    .trim());
             writer.newLine();
-            for (TransactionDto transaction : transactions) {
+            for (BankTransactionDto transaction : transactions) {
                 writer.write("%d,%d,%s,%s,%s,%s,%s,%s"
                         .formatted(
                                 transaction.id(),

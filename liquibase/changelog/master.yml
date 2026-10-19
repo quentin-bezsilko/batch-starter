@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - include:
+      file: 001-create-table-customer.yml
+      relativeToChangelogFile: true
+  - include:
+      file: 002-create-table-bank-account.yml
+      relativeToChangelogFile: true
+  - include:
+      file: 003-create-table-bank-transaction.yml
+      relativeToChangelogFile: true
+  - include:
+      file: 004-spring-batch.yml
+      relativeToChangelogFile: true

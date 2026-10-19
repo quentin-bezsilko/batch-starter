@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: 004-spring-batch-schema
+      author: qbe
+      changes:
+        - sqlFile:
+            path: sql/spring-batch-oracle.sql
+            relativeToChangelogFile: true

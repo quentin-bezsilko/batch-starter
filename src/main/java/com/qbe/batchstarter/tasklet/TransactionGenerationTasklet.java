@@ -1,7 +1,7 @@
 package com.qbe.batchstarter.tasklet;
 
 import com.qbe.batchstarter.context.GeneratorContext;
-import com.qbe.batchstarter.dto.TransactionDto;
+import com.qbe.batchstarter.dto.BankTransactionDto;
 import com.qbe.batchstarter.generator.TransactionFileGenerator;
 import com.qbe.batchstarter.properties.GeneratorProperties;
 import com.qbe.batchstarter.properties.TransactionGeneratorProperties;
@@ -11,6 +11,7 @@ import java.nio.file.Path;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.StepContribution;
@@ -31,7 +32,8 @@ public class TransactionGenerationTasklet implements Tasklet {
     private final TransactionGeneratorProperties transactionProperties;
 
     @Override
-    public @Nullable RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
+    public @Nullable RepeatStatus execute(@NonNull StepContribution contribution, @NonNull ChunkContext chunkContext)
+            throws Exception {
         log.info("Starting transaction generation...");
 
         if (generatorContext.getAccounts() == null) {
@@ -41,7 +43,7 @@ public class TransactionGenerationTasklet implements Tasklet {
         Path outputDirectory = Path.of(generatorProperties.outputDirectory());
         Files.createDirectories(outputDirectory);
 
-        List<TransactionDto> transactions =
+        List<BankTransactionDto> transactions =
                 transactionFileGenerator.generate(generatorContext.getAccounts(), transactionProperties.count());
         transactionWriter.write(transactions, outputDirectory.resolve("transactions.csv"));
 

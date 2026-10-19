@@ -5,7 +5,7 @@ import com.qbe.batchstarter.enums.TransactionType;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public record TransactionDto(
+public record BankTransactionDto(
         Long id,
         Long accountId,
         LocalDateTime transactionDate,

@@ -1,8 +1,8 @@
 package com.qbe.batchstarter.generator;
 
 import com.qbe.batchstarter.dto.BankAccountDto;
+import com.qbe.batchstarter.dto.BankTransactionDto;
 import com.qbe.batchstarter.dto.MerchantReference;
-import com.qbe.batchstarter.dto.TransactionDto;
 import com.qbe.batchstarter.service.RandomReferenceService;
 import com.qbe.batchstarter.service.TransactionGeneratorService;
 import java.util.ArrayList;
@@ -20,8 +20,8 @@ public class TransactionFileGenerator {
 
     private final Random random = new Random();
 
-    public List<TransactionDto> generate(List<BankAccountDto> accounts, int transactionCount) {
-        List<TransactionDto> transactions = new ArrayList<>(transactionCount);
+    public List<BankTransactionDto> generate(List<BankAccountDto> accounts, int transactionCount) {
+        List<BankTransactionDto> transactions = new ArrayList<>(transactionCount);
         for (long transactionId = 1; transactionId <= transactionCount; transactionId++) {
             BankAccountDto account = accounts.get(random.nextInt(accounts.size()));
             MerchantReference merchant = randomReferenceService.randomMerchant();
