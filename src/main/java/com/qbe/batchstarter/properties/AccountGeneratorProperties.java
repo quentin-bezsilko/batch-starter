@@ -4,6 +4,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(prefix = "generator.accounts")
 public record AccountGeneratorProperties(
+        int crashAfter,
+        long invalidIbanAccountId,
         int singleAccountRate,
         int doubleAccountRate,
         int tripleAccountRate,

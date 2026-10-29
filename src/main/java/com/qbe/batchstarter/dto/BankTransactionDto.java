@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 public record BankTransactionDto(
         Long id,
-        Long accountId,
+        String accountIban,
         LocalDateTime transactionDate,
         TransactionType transactionType,
         BigDecimal amount,

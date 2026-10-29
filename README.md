@@ -64,11 +64,11 @@ Sprint 4 (ok)
 ✅ Import BatchJdbcItemWriter
 ✅ Chunk processing
 
-Sprint 5
+Sprint 5 (ok)
 ✅ Skip
 ✅ Retry
 ✅ Crash volontaire
-✅ Restart
+✅ Restart / Reprise
 
 Sprint 6
 ✅ Multi-thread
@@ -87,7 +87,8 @@ Sprint 7
 Sprint 8 :
 ✅ Tests unitaires complets
 ✅ Endpoint /api/batch/status
-
+✅ Loki, Prometheus, Opentelemetry (profils), Grafana
+✅ README professionnel
 
 Plusieurs points importants validés :
 ✅ Répartition des pays

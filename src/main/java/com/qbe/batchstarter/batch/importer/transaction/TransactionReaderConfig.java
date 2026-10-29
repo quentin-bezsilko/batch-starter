@@ -25,13 +25,14 @@ public class TransactionReaderConfig {
 
         return new FlatFileItemReaderBuilder<BankTransactionDto>()
                 .name("transactionReader")
+                .saveState(true)
                 .resource(new FileSystemResource(
                         Path.of(generatorProperties.outputDirectory(), generatorProperties.transactionFileName())))
                 .linesToSkip(1)
                 .delimited()
                 .names(
                         "id",
-                        "accountId",
+                        "accountIban",
                         "transactionDate",
                         "transactionType",
                         "amount",
@@ -40,7 +41,7 @@ public class TransactionReaderConfig {
                         "transactionStatus")
                 .fieldSetMapper(fieldSet -> new BankTransactionDto(
                         fieldSet.readLong("id"),
-                        fieldSet.readLong("accountId"),
+                        fieldSet.readString("accountIban"),
                         LocalDateTime.parse(Objects.requireNonNull(fieldSet.readString("transactionDate"))),
                         TransactionType.valueOf(Objects.requireNonNull(fieldSet.readString("transactionType"))),
                         fieldSet.readBigDecimal("amount"),

@@ -21,6 +21,7 @@ public class CustomerReaderConfig {
     public FlatFileItemReader<CustomerDto> customerReader() {
         return new FlatFileItemReaderBuilder<CustomerDto>()
                 .name("customerReader")
+                .saveState(true)
                 .resource(new FileSystemResource(
                         generatorProperties.outputDirectory() + generatorProperties.customerFileName()))
                 .linesToSkip(1)

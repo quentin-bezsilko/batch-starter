@@ -1,7 +1,9 @@
 package com.qbe.batchstarter.batch.importer.transaction;
 
 import com.qbe.batchstarter.dto.BankTransactionDto;
+import com.qbe.batchstarter.entity.BankAccountEntity;
 import com.qbe.batchstarter.entity.BankTransactionEntity;
+import com.qbe.batchstarter.exception.InvalidBankTransactionException;
 import com.qbe.batchstarter.mapper.BankTransactionMapper;
 import com.qbe.batchstarter.repository.BankAccountRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,9 +19,13 @@ public class TransactionProcessorConfig implements ItemProcessor<BankTransaction
     private final BankAccountRepository bankAccountRepository;
 
     @Override
-    public BankTransactionEntity process(@NonNull BankTransactionDto bankTransactionDto) {
-        BankTransactionEntity entity = bankTransactionMapper.toEntity(bankTransactionDto);
-        entity.setAccount(bankAccountRepository.getReferenceById(bankTransactionDto.accountId()));
+    public BankTransactionEntity process(@NonNull BankTransactionDto dto) throws InvalidBankTransactionException {
+        BankTransactionEntity entity = bankTransactionMapper.toEntity(dto);
+        BankAccountEntity account = bankAccountRepository
+                .findByIban(dto.accountIban())
+                .orElseThrow(
+                        () -> new InvalidBankTransactionException("Account not found for IBAN " + dto.accountIban()));
+        entity.setAccount(account);
         return entity;
     }
 }

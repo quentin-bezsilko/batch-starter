@@ -23,6 +23,7 @@ public class AccountReaderConfig {
     public FlatFileItemReader<BankAccountDto> accountReader() {
         return new FlatFileItemReaderBuilder<BankAccountDto>()
                 .name("accountReader")
+                .saveState(true)
                 .resource(new FileSystemResource(
                         generatorProperties.outputDirectory() + generatorProperties.accountFileName()))
                 .linesToSkip(1)

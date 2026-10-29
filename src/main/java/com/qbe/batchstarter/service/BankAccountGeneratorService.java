@@ -9,9 +9,11 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class BankAccountGeneratorService {
 
@@ -27,7 +29,7 @@ public class BankAccountGeneratorService {
         return new BankAccountDto(
                 accountId,
                 customerId,
-                generateIban(country),
+                generateIban(accountId, country),
                 randomAccountType(),
                 currency,
                 randomBalance(),
@@ -67,7 +69,11 @@ public class BankAccountGeneratorService {
         return LocalDate.now().minusDays(random.nextInt(properties.maxOpeningAgeInDays() + 1));
     }
 
-    private String generateIban(String country) {
+    private String generateIban(long accountId, String country) {
+        if (accountId == properties.invalidIbanAccountId()) {
+            log.info("Generating empty IBAN for accountId={}", accountId);
+            return "";
+        }
         long accountNumber = Math.abs(random.nextLong()) % IBAN_MAX_VALUE;
         return country + (IBAN_KEY_MIN + random.nextInt(IBAN_KEY_MAX)) + String.format("%020d", accountNumber);
     }

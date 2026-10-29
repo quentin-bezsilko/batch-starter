@@ -24,7 +24,7 @@ public class TransactionGeneratorService {
     public BankTransactionDto generate(long transactionId, BankAccountDto account, MerchantReference merchant) {
         return new BankTransactionDto(
                 transactionId,
-                account.id(),
+                account.iban(),
                 randomTransactionDate(),
                 randomTransactionType(),
                 randomAmount(merchant.category()),

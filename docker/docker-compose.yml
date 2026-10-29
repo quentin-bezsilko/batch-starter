@@ -46,7 +46,7 @@ services:
       SPRING_DATASOURCE_USERNAME: batchuser
       SPRING_DATASOURCE_PASSWORD: batchpassword
     volumes:
-      - ./output:/app/output
+      - ./data/output:/app/data/output
 
 volumes:
   oracle-data:

@@ -1,6 +1,7 @@
 spring:
   main:
     web-application-type: none
+    allow-bean-definition-overriding: true
   application:
     name: batchstarter
   batch:
@@ -8,11 +9,12 @@ spring:
       initialize-schema: never
     job:
       name: dataWorkflowJob
-  datasource:
-    url: jdbc:oracle:thin:@localhost:1521/XEPDB1
-    username: batchuser
-    password: batchpassword
-    driver-class-name: oracle.jdbc.OracleDriver
+  spring:
+    datasource:
+      url: jdbc:oracle:thin:@//oracle:1521/XEPDB1
+      username: batchuser
+      password: batchpassword
+      driver-class-name: oracle.jdbc.OracleDriver
 
 management:
   endpoints:
@@ -24,17 +26,23 @@ management:
       show-details: always
 
 generator:
+  simulate-retry: true
   output-directory: ./data/output
   customer-file-name: /customers.csv
   account-file-name: /accounts.csv
   transaction-file-name: /transactions.csv
   customers:
-    count: 100000
+    count: 10000
     min-age: 18
     max-age: 80
     minor-rate: 10
     major-rate: 70
   accounts:
+    crash-after: 0 # Mettre un nombre > 0 pour simuler un crash volontaire après la génération de ce nombre de comptes
+    invalid-iban-account-id: 10
+    single-account-rate: 50
+    double-account-rate: 35
+    triple-account-rate: 15
     checking-rate: 70
     savings-rate: 25
     business-rate: 5
@@ -45,7 +53,7 @@ generator:
     max-balance: 50000
     max-opening-age-in-days: 3650
   transactions:
-    count: 1000000
+    count: 100000
     card-payment-rate: 80
     transfer-rate: 10
     direct-debit-rate: 5
@@ -61,6 +69,9 @@ generator:
     US: 15
     ES: 10
     IT: 10
-  logging:
-    level:
-      org.springframework.batch: INFO
+
+logging:
+  level:
+    org.springframework.batch: INFO
+    org.springframework.boot.autoconfigure.batch: INFO
+    org.springframework.boot.autoconfigure: INFO

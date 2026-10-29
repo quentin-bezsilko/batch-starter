@@ -12,14 +12,14 @@ import org.springframework.stereotype.Service;
 public class CsvTransactionWriter {
     public void write(List<BankTransactionDto> transactions, Path path) throws IOException {
         try (BufferedWriter writer = Files.newBufferedWriter(path)) {
-            writer.write("id,accountId,transactionDate,transactionType,amount,merchantName,currency,transactionStatus"
+            writer.write("id,accountIban,transactionDate,transactionType,amount,merchantName,currency,transactionStatus"
                     .trim());
             writer.newLine();
             for (BankTransactionDto transaction : transactions) {
-                writer.write("%d,%d,%s,%s,%s,%s,%s,%s"
+                writer.write("%d,%s,%s,%s,%s,%s,%s,%s"
                         .formatted(
                                 transaction.id(),
-                                transaction.accountId(),
+                                transaction.accountIban(),
                                 transaction.transactionDate(),
                                 transaction.transactionType(),
                                 transaction.amount(),
