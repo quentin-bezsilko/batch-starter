@@ -3,17 +3,19 @@ package com.qbe.batchstarter.batch.importer.transaction;
 import com.qbe.batchstarter.dto.BankTransactionDto;
 import com.qbe.batchstarter.entity.BankTransactionEntity;
 import com.qbe.batchstarter.exception.InvalidBankTransactionException;
+import com.qbe.batchstarter.partition.TransactionPartitioner;
+import com.qbe.batchstarter.properties.BatchProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.job.Job;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.Step;
-import org.springframework.batch.core.step.builder.ChunkOrientedStepBuilder;
 import org.springframework.batch.core.step.builder.StepBuilder;
+import org.springframework.batch.infrastructure.item.ItemReader;
 import org.springframework.batch.infrastructure.item.database.JpaItemWriter;
-import org.springframework.batch.infrastructure.item.file.FlatFileItemReader;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
@@ -21,22 +23,35 @@ import org.springframework.transaction.PlatformTransactionManager;
 public class TransactionImportJobConfig {
 
     private final PlatformTransactionManager transactionManager;
-    private final FlatFileItemReader<BankTransactionDto> transactionReader;
     private final TransactionProcessorConfig transactionProcessor;
     private final JpaItemWriter<BankTransactionEntity> transactionWriter;
+    private final BatchProperties batchProperties;
 
     @Bean
-    public Step transactionImportStep(JobRepository jobRepository) {
-        ChunkOrientedStepBuilder<BankTransactionDto, BankTransactionEntity> builder =
-                new StepBuilder("transactionImportStep", jobRepository).chunk(1000);
+    public Step transactionImportStep(
+            JobRepository jobRepository,
+            TransactionPartitioner partitioner,
+            AsyncTaskExecutor taskExecutor,
+            Step transactionWorkerStep) {
+        return new StepBuilder("transactionImportStep", jobRepository)
+                .partitioner("transactionWorkerStep", partitioner)
+                .step(transactionWorkerStep)
+                .gridSize(batchProperties.partitioningGridSize())
+                .taskExecutor(taskExecutor)
+                .build();
+    }
 
-        return builder.transactionManager(transactionManager)
+    @Bean
+    public Step transactionWorkerStep(JobRepository jobRepository, ItemReader<BankTransactionDto> transactionReader) {
+        return new StepBuilder("transactionWorkerStep", jobRepository)
+                .<BankTransactionDto, BankTransactionEntity>chunk(batchProperties.chunkSize())
                 .reader(transactionReader)
                 .processor(transactionProcessor)
                 .writer(transactionWriter)
-                .skip(InvalidBankTransactionException.class)
                 .faultTolerant()
-                .skipLimit(100)
+                .skip(InvalidBankTransactionException.class)
+                .skipLimit(batchProperties.skipLimit())
+                .transactionManager(transactionManager)
                 .build();
     }
 

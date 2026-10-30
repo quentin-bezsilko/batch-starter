@@ -45,6 +45,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:oracle:thin:@oracle:1521/XEPDB1
       SPRING_DATASOURCE_USERNAME: batchuser
       SPRING_DATASOURCE_PASSWORD: batchpassword
+      SPRING_PROFILES_ACTIVE: parallel # default, parallel, partitioning
     volumes:
       - ./data/output:/app/data/output
 

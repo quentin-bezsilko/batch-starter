@@ -1,5 +1,6 @@
 package com.qbe.batchstarter.batch.importer.transaction;
 
+import com.qbe.batchstarter.batch.importer.RangeReader;
 import com.qbe.batchstarter.dto.BankTransactionDto;
 import com.qbe.batchstarter.enums.TransactionStatus;
 import com.qbe.batchstarter.enums.TransactionType;
@@ -8,27 +9,37 @@ import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.batch.core.configuration.annotation.StepScope;
+import org.springframework.batch.infrastructure.item.ItemStreamReader;
 import org.springframework.batch.infrastructure.item.file.FlatFileItemReader;
 import org.springframework.batch.infrastructure.item.file.builder.FlatFileItemReaderBuilder;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
 
 @Configuration
+@Slf4j
 @RequiredArgsConstructor
 public class TransactionReaderConfig {
 
     private final GeneratorProperties generatorProperties;
 
     @Bean
-    public FlatFileItemReader<BankTransactionDto> transactionReader() {
+    @StepScope
+    public ItemStreamReader<BankTransactionDto> transactionReader(
+            @Value("#{stepExecutionContext['startLine']}") Integer startLine,
+            @Value("#{stepExecutionContext['endLine']}") Integer endLine) {
+        log.info("Reader initialized startLine={}, endLine={}", startLine, endLine);
+        int maxItems = endLine - startLine + 1;
 
-        return new FlatFileItemReaderBuilder<BankTransactionDto>()
+        FlatFileItemReader<BankTransactionDto> delegate = new FlatFileItemReaderBuilder<BankTransactionDto>()
                 .name("transactionReader")
                 .saveState(true)
                 .resource(new FileSystemResource(
                         Path.of(generatorProperties.outputDirectory(), generatorProperties.transactionFileName())))
-                .linesToSkip(1)
+                .linesToSkip(startLine)
                 .delimited()
                 .names(
                         "id",
@@ -49,5 +60,7 @@ public class TransactionReaderConfig {
                         fieldSet.readString("currency"),
                         TransactionStatus.valueOf(Objects.requireNonNull(fieldSet.readString("transactionStatus")))))
                 .build();
+
+        return new RangeReader<>(delegate, maxItems);
     }
 }

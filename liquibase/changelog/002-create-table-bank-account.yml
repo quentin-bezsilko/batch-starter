@@ -69,3 +69,10 @@ databaseChangeLog:
             sequenceName: BANK_ACCOUNT_SEQ
             startValue: 1
             incrementBy: 1
+        - createIndex:
+            schemaName: BATCHUSER
+            tableName: BANK_ACCOUNT
+            indexName: IDX_BANK_ACCOUNT_IBAN
+            columns:
+              - column:
+                  name: IBAN

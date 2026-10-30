@@ -9,12 +9,19 @@ spring:
       initialize-schema: never
     job:
       name: dataWorkflowJob
-  spring:
     datasource:
       url: jdbc:oracle:thin:@//oracle:1521/XEPDB1
       username: batchuser
       password: batchpassword
       driver-class-name: oracle.jdbc.OracleDriver
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:parallel}
+
+batch:
+  chunkSize: 1000
+  parallel-threads: 8
+  partitioning-grid-size: 4
+  skipLimit: 100
 
 management:
   endpoints:
@@ -32,7 +39,7 @@ generator:
   account-file-name: /accounts.csv
   transaction-file-name: /transactions.csv
   customers:
-    count: 10000
+    count: 100000
     min-age: 18
     max-age: 80
     minor-rate: 10
@@ -53,7 +60,7 @@ generator:
     max-balance: 50000
     max-opening-age-in-days: 3650
   transactions:
-    count: 100000
+    count: 1000000
     card-payment-rate: 80
     transfer-rate: 10
     direct-debit-rate: 5

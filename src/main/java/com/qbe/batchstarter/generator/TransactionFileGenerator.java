@@ -27,9 +27,11 @@ public class TransactionFileGenerator {
                 .toList();
 
         List<BankTransactionDto> transactions = new ArrayList<>(transactionCount);
+        BankAccountDto account;
+        MerchantReference merchant;
         for (long transactionId = 1; transactionId <= transactionCount; transactionId++) {
-            BankAccountDto account = validAccounts.get(random.nextInt(validAccounts.size()));
-            MerchantReference merchant = randomReferenceService.randomMerchant();
+            account = validAccounts.get(random.nextInt(validAccounts.size()));
+            merchant = randomReferenceService.randomMerchant();
             transactions.add(transactionGeneratorService.generate(transactionId, account, merchant));
         }
         return transactions;

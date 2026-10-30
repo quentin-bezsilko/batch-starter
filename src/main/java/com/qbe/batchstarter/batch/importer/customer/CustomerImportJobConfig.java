@@ -2,12 +2,12 @@ package com.qbe.batchstarter.batch.importer.customer;
 
 import com.qbe.batchstarter.dto.CustomerDto;
 import com.qbe.batchstarter.entity.CustomerEntity;
+import com.qbe.batchstarter.properties.BatchProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.job.Job;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.Step;
-import org.springframework.batch.core.step.builder.ChunkOrientedStepBuilder;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.infrastructure.item.database.JpaItemWriter;
 import org.springframework.batch.infrastructure.item.file.FlatFileItemReader;
@@ -23,16 +23,16 @@ public class CustomerImportJobConfig {
     private final FlatFileItemReader<CustomerDto> customerReader;
     private final CustomerProcessorConfig customerProcessor;
     private final JpaItemWriter<CustomerEntity> customerWriter;
+    private final BatchProperties batchProperties;
 
     @Bean
     public Step customerImportStep(JobRepository jobRepository) {
-        ChunkOrientedStepBuilder<CustomerDto, CustomerEntity> builder =
-                new StepBuilder("customerImportStep", jobRepository).chunk(1000);
-
-        return builder.transactionManager(transactionManager)
+        return new StepBuilder("customerImportStep", jobRepository)
+                .<CustomerDto, CustomerEntity>chunk(batchProperties.chunkSize())
                 .reader(customerReader)
                 .processor(customerProcessor)
                 .writer(customerWriter)
+                .transactionManager(transactionManager)
                 .build();
     }
 

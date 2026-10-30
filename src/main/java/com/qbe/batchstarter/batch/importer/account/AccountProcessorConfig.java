@@ -8,6 +8,8 @@ import com.qbe.batchstarter.mapper.BankAccountMapper;
 import com.qbe.batchstarter.properties.AccountGeneratorProperties;
 import com.qbe.batchstarter.properties.GeneratorProperties;
 import com.qbe.batchstarter.repository.CustomerRepository;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.NonNull;
@@ -24,24 +26,22 @@ public class AccountProcessorConfig implements ItemProcessor<BankAccountDto, Ban
     private final GeneratorProperties generatorProperties;
     private final AccountGeneratorProperties accountGeneratorProperties;
 
-    private boolean retryDone;
-    private long processed;
+    private final AtomicBoolean retryDone = new AtomicBoolean();
+    private final AtomicInteger processed = new AtomicInteger();
 
     @Override
     public BankAccountEntity process(@NonNull BankAccountDto item) {
-        processed++;
-
-        if (accountGeneratorProperties.crashAfter() > 0 && processed == accountGeneratorProperties.crashAfter()) {
+        int processedLong = processed.incrementAndGet();
+        if (accountGeneratorProperties.crashAfter() > 0 && processedLong == accountGeneratorProperties.crashAfter()) {
             throw new RuntimeException("Crash volontaire");
         }
-        if (generatorProperties.simulateRetry() && !retryDone) {
-            log.info("ERREUR TEMPORAIRE SIMULEE for item with id={}", item.id());
-            retryDone = true;
+        if (generatorProperties.simulateRetry() && retryDone.compareAndSet(false, true)) {
+            log.info("Erreur temporaire simulée for item with id={}", item.id());
             throw new TemporaryException("Erreur temporaire simulée");
         }
         if (item.iban() == null || item.iban().isBlank()) {
-            log.info("IBAN manquant for item with id={}", item.id());
-            throw new InvalidBankAccountException("IBAN manquant");
+            log.info("Iban manquant for item with id={}", item.id());
+            throw new InvalidBankAccountException("Iban manquant");
         }
 
         BankAccountEntity entity = bankAccountMapper.toEntity(item);
