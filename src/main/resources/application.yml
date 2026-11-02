@@ -1,84 +1,93 @@
+
 spring:
   main:
-    web-application-type: none
-    allow-bean-definition-overriding: true
+    web-application-type: ${SPRING_MAIN_WEB_APPLICATION_TYPE:none}
+    allow-bean-definition-overriding: ${SPRING_MAIN_ALLOW_BEAN_DEFINITION_OVERRIDING:true}
+
   application:
-    name: batchstarter
+    name: ${SPRING_APPLICATION_NAME:batchstarter}
+
   batch:
     jdbc:
-      initialize-schema: never
+      initialize-schema: ${SPRING_BATCH_JDBC_INITIALIZE_SCHEMA:never}
     job:
-      name: dataWorkflowJob
-    datasource:
-      url: jdbc:oracle:thin:@//oracle:1521/XEPDB1
-      username: batchuser
-      password: batchpassword
-      driver-class-name: oracle.jdbc.OracleDriver
+      name: ${SPRING_BATCH_JOB_NAME:dataWorkflowJob}
+
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:oracle:thin:@//localhost:1521/XEPDB1}
+    username: ${SPRING_DATASOURCE_USERNAME:batchuser}
+    password: ${SPRING_DATASOURCE_PASSWORD:batchpassword}
+    driver-class-name: ${SPRING_DATASOURCE_DRIVER_CLASS_NAME:oracle.jdbc.OracleDriver}
+
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:parallel}
 
 batch:
-  chunkSize: 1000
-  parallel-threads: 8
-  partitioning-grid-size: 4
-  skipLimit: 100
+  chunkSize: ${BATCH_CHUNK_SIZE:1000}
+  parallel-threads: ${BATCH_PARALLEL_THREADS:8}
+  partitioning-grid-size: ${BATCH_PARTITIONING_GRID_SIZE:4}
+  skipLimit: ${BATCH_SKIP_LIMIT:100}
 
 management:
   endpoints:
     web:
       exposure:
-        include: health,info,prometheus,metrics
+        include: ${MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE:health,info,prometheus,metrics}
   endpoint:
     health:
-      show-details: always
+      show-details: ${MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS:always}
 
 generator:
-  simulate-retry: true
-  output-directory: ./data/output
-  customer-file-name: /customers.csv
-  account-file-name: /accounts.csv
-  transaction-file-name: /transactions.csv
+  simulate-retry: ${GENERATOR_SIMULATE_RETRY:true}
+  output-directory: ${GENERATOR_OUTPUT_DIRECTORY:./data/output}
+  customer-file-name: ${GENERATOR_CUSTOMER_FILE_NAME:/customers.csv}
+  account-file-name: ${GENERATOR_ACCOUNT_FILE_NAME:/accounts.csv}
+  transaction-file-name: ${GENERATOR_TRANSACTION_FILE_NAME:/transactions.csv}
+
   customers:
-    count: 100000
-    min-age: 18
-    max-age: 80
-    minor-rate: 10
-    major-rate: 70
+    count: ${GENERATOR_CUSTOMERS_COUNT:100000}
+    min-age: ${GENERATOR_CUSTOMERS_MIN_AGE:18}
+    max-age: ${GENERATOR_CUSTOMERS_MAX_AGE:80}
+    minor-rate: ${GENERATOR_CUSTOMERS_MINOR_RATE:10}
+    major-rate: ${GENERATOR_CUSTOMERS_MAJOR_RATE:70}
+
   accounts:
-    crash-after: 0 # Mettre un nombre > 0 pour simuler un crash volontaire après la génération de ce nombre de comptes
-    invalid-iban-account-id: 10
-    single-account-rate: 50
-    double-account-rate: 35
-    triple-account-rate: 15
-    checking-rate: 70
-    savings-rate: 25
-    business-rate: 5
-    active-rate: 95
-    blocked-rate: 3
-    closed-rate: 2
-    min-balance: 100
-    max-balance: 50000
-    max-opening-age-in-days: 3650
+    crash-after: ${GENERATOR_ACCOUNTS_CRASH_AFTER:0}
+    invalid-iban-account-id: ${GENERATOR_ACCOUNTS_INVALID_IBAN_ACCOUNT_ID:10}
+    single-account-rate: ${GENERATOR_ACCOUNTS_SINGLE_ACCOUNT_RATE:50}
+    double-account-rate: ${GENERATOR_ACCOUNTS_DOUBLE_ACCOUNT_RATE:35}
+    triple-account-rate: ${GENERATOR_ACCOUNTS_TRIPLE_ACCOUNT_RATE:15}
+    checking-rate: ${GENERATOR_ACCOUNTS_CHECKING_RATE:70}
+    savings-rate: ${GENERATOR_ACCOUNTS_SAVINGS_RATE:25}
+    business-rate: ${GENERATOR_ACCOUNTS_BUSINESS_RATE:5}
+    active-rate: ${GENERATOR_ACCOUNTS_ACTIVE_RATE:95}
+    blocked-rate: ${GENERATOR_ACCOUNTS_BLOCKED_RATE:3}
+    closed-rate: ${GENERATOR_ACCOUNTS_CLOSED_RATE:2}
+    min-balance: ${GENERATOR_ACCOUNTS_MIN_BALANCE:100}
+    max-balance: ${GENERATOR_ACCOUNTS_MAX_BALANCE:50000}
+    max-opening-age-in-days: ${GENERATOR_ACCOUNTS_MAX_OPENING_AGE_IN_DAYS:3650}
+
   transactions:
-    count: 1000000
-    card-payment-rate: 80
-    transfer-rate: 10
-    direct-debit-rate: 5
-    cash-withdrawal-rate: 5
-    completed-rate: 95
-    pending-rate: 4
-    rejected-rate: 1
-    high-amount-fraud-rate: 0.002
+    count: ${GENERATOR_TRANSACTIONS_COUNT:1000000}
+    card-payment-rate: ${GENERATOR_TRANSACTIONS_CARD_PAYMENT_RATE:80}
+    transfer-rate: ${GENERATOR_TRANSACTIONS_TRANSFER_RATE:10}
+    direct-debit-rate: ${GENERATOR_TRANSACTIONS_DIRECT_DEBIT_RATE:5}
+    cash-withdrawal-rate: ${GENERATOR_TRANSACTIONS_CASH_WITHDRAWAL_RATE:5}
+    completed-rate: ${GENERATOR_TRANSACTIONS_COMPLETED_RATE:95}
+    pending-rate: ${GENERATOR_TRANSACTIONS_PENDING_RATE:4}
+    rejected-rate: ${GENERATOR_TRANSACTIONS_REJECTED_RATE:1}
+    high-amount-fraud-rate: ${GENERATOR_TRANSACTIONS_HIGH_AMOUNT_FRAUD_RATE:0.002}
+
   countries:
-    FR: 30
-    DE: 20
-    UK: 15
-    US: 15
-    ES: 10
-    IT: 10
+    FR: ${GENERATOR_COUNTRIES_FR:30}
+    DE: ${GENERATOR_COUNTRIES_DE:20}
+    UK: ${GENERATOR_COUNTRIES_UK:15}
+    US: ${GENERATOR_COUNTRIES_US:15}
+    ES: ${GENERATOR_COUNTRIES_ES:10}
+    IT: ${GENERATOR_COUNTRIES_IT:10}
 
 logging:
   level:
-    org.springframework.batch: INFO
-    org.springframework.boot.autoconfigure.batch: INFO
-    org.springframework.boot.autoconfigure: INFO
+    org.springframework.batch: ${LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_BATCH:INFO}
+    org.springframework.boot.autoconfigure.batch: ${LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_BOOT_AUTOCONFIGURE_BATCH:INFO}
+    org.springframework.boot.autoconfigure: ${LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_BOOT_AUTOCONFIGURE:INFO}

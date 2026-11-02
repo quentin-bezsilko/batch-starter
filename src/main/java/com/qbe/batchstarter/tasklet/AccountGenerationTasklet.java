@@ -2,7 +2,7 @@ package com.qbe.batchstarter.tasklet;
 
 import com.qbe.batchstarter.context.GeneratorContext;
 import com.qbe.batchstarter.dto.BankAccountDto;
-import com.qbe.batchstarter.generator.AccountFileGenerator;
+import com.qbe.batchstarter.generator.BankAccountFileGenerator;
 import com.qbe.batchstarter.properties.GeneratorProperties;
 import com.qbe.batchstarter.writer.CsvAccountWriter;
 import java.nio.file.Files;
@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
 public class AccountGenerationTasklet implements Tasklet {
 
     private final GeneratorContext generatorContext;
-    private final AccountFileGenerator accountGenerator;
+    private final BankAccountFileGenerator accountGenerator;
     private final CsvAccountWriter accountWriter;
 
     private final GeneratorProperties generatorProperties;

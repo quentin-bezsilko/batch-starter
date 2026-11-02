@@ -2,7 +2,7 @@ package com.qbe.batchstarter.tasklet;
 
 import com.qbe.batchstarter.context.GeneratorContext;
 import com.qbe.batchstarter.dto.BankTransactionDto;
-import com.qbe.batchstarter.generator.TransactionFileGenerator;
+import com.qbe.batchstarter.generator.BankTransactionFileGenerator;
 import com.qbe.batchstarter.properties.GeneratorProperties;
 import com.qbe.batchstarter.properties.TransactionGeneratorProperties;
 import com.qbe.batchstarter.writer.CsvTransactionWriter;
@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
 public class TransactionGenerationTasklet implements Tasklet {
 
     private final GeneratorContext generatorContext;
-    private final TransactionFileGenerator transactionFileGenerator;
+    private final BankTransactionFileGenerator transactionFileGenerator;
     private final CsvTransactionWriter transactionWriter;
 
     private final GeneratorProperties generatorProperties;

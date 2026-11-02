@@ -78,7 +78,7 @@ Sprint 6 (ok)
 
 Au final on laissera comme ça pour une démo complète : 
 CustomerImportStep      -> 100.000 (Séquentiel)
-AccountImportStep       -> 300.000 (Multi-thread (TaskExecutor))
+AccountImportStep       -> 300.000 (Multi-thread / TaskExecutor)
 TransactionImportStep   -> 1.000.000 (Partitioning)
 => Supprimer les profiles
 
@@ -334,12 +334,11 @@ Sprint 7
 ✅ Endpoint /api/batch/status
 
 Sprint 8 :
-✅ Tests unitaires complets
+✅ Finaliser les TU
+✅ Intégration Sonar
 ✅ Endpoint /api/batch/status
 ✅ Loki, Prometheus, Opentelemetry (profils), Grafana
 ✅ README professionnel
 
 TODO :
-- Créer tous les TU, plugin Jacoco, spor avant de démarrer sprint 5
-- Paramétrer l'application avec un fichier .env
-- Reprendre sprint 5
+- Reprendre sprint 7

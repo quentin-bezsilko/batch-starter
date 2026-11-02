@@ -11,7 +11,6 @@ import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.configuration.annotation.StepScope;
-import org.springframework.batch.infrastructure.item.ItemStreamReader;
 import org.springframework.batch.infrastructure.item.file.FlatFileItemReader;
 import org.springframework.batch.infrastructure.item.file.builder.FlatFileItemReaderBuilder;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,7 +27,7 @@ public class TransactionReaderConfig {
 
     @Bean
     @StepScope
-    public ItemStreamReader<BankTransactionDto> transactionReader(
+    public RangeReader<BankTransactionDto> transactionReader(
             @Value("#{stepExecutionContext['startLine']}") Integer startLine,
             @Value("#{stepExecutionContext['endLine']}") Integer endLine) {
         log.info("Reader initialized startLine={}, endLine={}", startLine, endLine);

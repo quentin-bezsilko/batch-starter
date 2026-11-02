@@ -1,16 +1,16 @@
 services:
 
   oracle:
-    image: gvenzl/oracle-xe:21-slim
-    container_name: oracle
+    image: ${ORACLE_IMAGE}
+    container_name: ${ORACLE_CONTAINER_NAME}
     environment:
-      ORACLE_PASSWORD: oracle
-      APP_USER: batchuser
-      APP_USER_PASSWORD: batchpassword
+      ORACLE_PASSWORD: ${ORACLE_PASSWORD}
+      APP_USER: ${ORACLE_APP_USER}
+      APP_USER_PASSWORD: ${ORACLE_APP_USER_PASSWORD}
     ports:
-      - "1521:1521"
+      - "${ORACLE_PORT}:1521"
     volumes:
-      - oracle-data:/opt/oracle/oradata
+      - ${ORACLE_DATA_VOLUME}:/opt/oracle/oradata
     healthcheck:
       test: ["CMD", "healthcheck.sh"]
       interval: 15s
@@ -18,8 +18,8 @@ services:
       retries: 20
 
   liquibase:
-    image: liquibase/liquibase:latest
-    container_name: liquibase
+    image: ${LIQUIBASE_IMAGE}
+    container_name: ${LIQUIBASE_CONTAINER_NAME}
     depends_on:
       oracle:
         condition: service_healthy
@@ -28,26 +28,30 @@ services:
       - ../liquibase/drivers:/liquibase/lib
     command:
       - --search-path=/liquibase/changelog
-      - --url=jdbc:oracle:thin:@oracle:1521/XEPDB1
-      - --username=batchuser
-      - --password=batchpassword
-      - --changelog-file=master.yml
+      - --url=${LIQUIBASE_URL}
+      - --username=${LIQUIBASE_USERNAME}
+      - --password=${LIQUIBASE_PASSWORD}
+      - --changelog-file=${LIQUIBASE_CHANGELOG_FILE}
       - update
 
   batch:
     build:
       context: ..
       dockerfile: docker/app/Dockerfile
-    container_name: batch-app
+    container_name: ${BATCH_CONTAINER_NAME}
     depends_on:
-      - liquibase
+      liquibase:
+        condition: service_completed_successfully
+    env_file:
+      - .env
     environment:
-      SPRING_DATASOURCE_URL: jdbc:oracle:thin:@oracle:1521/XEPDB1
-      SPRING_DATASOURCE_USERNAME: batchuser
-      SPRING_DATASOURCE_PASSWORD: batchpassword
-      SPRING_PROFILES_ACTIVE: parallel # default, parallel, partitioning
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
     volumes:
       - ./data/output:/app/data/output
 
 volumes:
   oracle-data:
+    name: ${ORACLE_DATA_VOLUME}

@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class TransactionFileGenerator {
+public class BankTransactionFileGenerator {
 
     private final TransactionGeneratorService transactionGeneratorService;
     private final RandomReferenceService randomReferenceService;

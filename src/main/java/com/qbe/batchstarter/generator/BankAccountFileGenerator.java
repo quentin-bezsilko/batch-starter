@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class AccountFileGenerator {
+public class BankAccountFileGenerator {
 
     private final BankAccountGeneratorService bankAccountGeneratorService;
     private final AccountGeneratorProperties accountGeneratorProperties;

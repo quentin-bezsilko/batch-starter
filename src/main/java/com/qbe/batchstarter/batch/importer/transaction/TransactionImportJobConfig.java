@@ -11,7 +11,7 @@ import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.Step;
 import org.springframework.batch.core.step.builder.StepBuilder;
-import org.springframework.batch.infrastructure.item.ItemReader;
+import org.springframework.batch.infrastructure.item.ItemStreamReader;
 import org.springframework.batch.infrastructure.item.database.JpaItemWriter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -42,7 +42,8 @@ public class TransactionImportJobConfig {
     }
 
     @Bean
-    public Step transactionWorkerStep(JobRepository jobRepository, ItemReader<BankTransactionDto> transactionReader) {
+    public Step transactionWorkerStep(
+            JobRepository jobRepository, ItemStreamReader<BankTransactionDto> transactionReader) {
         return new StepBuilder("transactionWorkerStep", jobRepository)
                 .<BankTransactionDto, BankTransactionEntity>chunk(batchProperties.chunkSize())
                 .reader(transactionReader)
