@@ -76,3 +76,10 @@ databaseChangeLog:
             columns:
               - column:
                   name: IBAN
+        - createIndex:
+            schemaName: BATCHUSER
+            tableName: BANK_ACCOUNT
+            indexName: IDX_BANK_ACCOUNT_CUSTOMER_ID
+            columns:
+              - column:
+                  name: CUSTOMER_ID

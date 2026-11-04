@@ -23,7 +23,7 @@ public class BankAccountGeneratorService {
     private static final long IBAN_MAX_VALUE = 1_000_000_000_000_000_000L;
 
     private final AccountGeneratorProperties properties;
-    private final Random random = new Random();
+    private final Random random;
 
     public BankAccountDto generate(long accountId, long customerId, String country, String currency) {
         return new BankAccountDto(
@@ -37,7 +37,7 @@ public class BankAccountGeneratorService {
                 randomOpeningDate());
     }
 
-    private AccountType randomAccountType() {
+    protected AccountType randomAccountType() {
         int value = random.nextInt(PERCENTAGE_MAX);
         if (value < properties.checkingRate()) {
             return AccountType.CHECKING;
@@ -48,7 +48,7 @@ public class BankAccountGeneratorService {
         return AccountType.BUSINESS;
     }
 
-    private AccountStatus randomStatus() {
+    protected AccountStatus randomStatus() {
         int value = random.nextInt(PERCENTAGE_MAX);
         if (value < properties.activeRate()) {
             return AccountStatus.ACTIVE;
@@ -59,17 +59,17 @@ public class BankAccountGeneratorService {
         return AccountStatus.CLOSED;
     }
 
-    private BigDecimal randomBalance() {
+    protected BigDecimal randomBalance() {
         double min = properties.minBalance();
         double max = properties.maxBalance();
         return BigDecimal.valueOf(min + random.nextDouble() * (max - min)).setScale(2, RoundingMode.HALF_UP);
     }
 
-    private LocalDate randomOpeningDate() {
+    protected LocalDate randomOpeningDate() {
         return LocalDate.now().minusDays(random.nextInt(properties.maxOpeningAgeInDays() + 1));
     }
 
-    private String generateIban(long accountId, String country) {
+    protected String generateIban(long accountId, String country) {
         if (accountId == properties.invalidIbanAccountId()) {
             log.info("Generating empty IBAN for accountId={}", accountId);
             return "";

@@ -1,24 +1,20 @@
-
 spring:
   main:
     web-application-type: ${SPRING_MAIN_WEB_APPLICATION_TYPE:none}
     allow-bean-definition-overriding: ${SPRING_MAIN_ALLOW_BEAN_DEFINITION_OVERRIDING:true}
-
   application:
     name: ${SPRING_APPLICATION_NAME:batchstarter}
-
   batch:
     jdbc:
       initialize-schema: ${SPRING_BATCH_JDBC_INITIALIZE_SCHEMA:never}
     job:
       name: ${SPRING_BATCH_JOB_NAME:dataWorkflowJob}
-
+      enable: ${SPRING_BATCH_JOB_ENABLE:true}
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:oracle:thin:@//localhost:1521/XEPDB1}
     username: ${SPRING_DATASOURCE_USERNAME:batchuser}
     password: ${SPRING_DATASOURCE_PASSWORD:batchpassword}
     driver-class-name: ${SPRING_DATASOURCE_DRIVER_CLASS_NAME:oracle.jdbc.OracleDriver}
-
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:parallel}
 
@@ -43,14 +39,19 @@ generator:
   customer-file-name: ${GENERATOR_CUSTOMER_FILE_NAME:/customers.csv}
   account-file-name: ${GENERATOR_ACCOUNT_FILE_NAME:/accounts.csv}
   transaction-file-name: ${GENERATOR_TRANSACTION_FILE_NAME:/transactions.csv}
-
+  customer-enrichment-file-name: ${GENERATOR_CUSTOMER_ENRICHMENT_FILE_NAME:/customer_enrichment.csv}
+  global-report-file-name: ${GENERATOR_GLOBAL_REPORT_FILE_NAME:/global_report.csv}
+  customer-report-file-name: ${GENERATOR_CUSTOMER_REPORT_FILE_NAME:/customer_report.csv}
+  best-client-report-file-name: ${GENERATOR_BEST_CLIENT_REPORT_FILE_NAME:/best_client_report.csv}
+  account-report-file-name: ${GENERATOR_ACCOUNT_REPORT_FILE_NAME:/account_report.csv}
+  transaction-report-file-name: ${GENERATOR_TRANSACTION_REPORT_FILE_NAME:/transaction_report.csv}
+  fraud-report-file-name: ${GENERATOR_FRAUD_REPORT_FILE_NAME:/fraud_report.csv}
   customers:
     count: ${GENERATOR_CUSTOMERS_COUNT:100000}
     min-age: ${GENERATOR_CUSTOMERS_MIN_AGE:18}
     max-age: ${GENERATOR_CUSTOMERS_MAX_AGE:80}
     minor-rate: ${GENERATOR_CUSTOMERS_MINOR_RATE:10}
     major-rate: ${GENERATOR_CUSTOMERS_MAJOR_RATE:70}
-
   accounts:
     crash-after: ${GENERATOR_ACCOUNTS_CRASH_AFTER:0}
     invalid-iban-account-id: ${GENERATOR_ACCOUNTS_INVALID_IBAN_ACCOUNT_ID:10}
@@ -66,7 +67,6 @@ generator:
     min-balance: ${GENERATOR_ACCOUNTS_MIN_BALANCE:100}
     max-balance: ${GENERATOR_ACCOUNTS_MAX_BALANCE:50000}
     max-opening-age-in-days: ${GENERATOR_ACCOUNTS_MAX_OPENING_AGE_IN_DAYS:3650}
-
   transactions:
     count: ${GENERATOR_TRANSACTIONS_COUNT:1000000}
     card-payment-rate: ${GENERATOR_TRANSACTIONS_CARD_PAYMENT_RATE:80}
@@ -77,7 +77,6 @@ generator:
     pending-rate: ${GENERATOR_TRANSACTIONS_PENDING_RATE:4}
     rejected-rate: ${GENERATOR_TRANSACTIONS_REJECTED_RATE:1}
     high-amount-fraud-rate: ${GENERATOR_TRANSACTIONS_HIGH_AMOUNT_FRAUD_RATE:0.002}
-
   countries:
     FR: ${GENERATOR_COUNTRIES_FR:30}
     DE: ${GENERATOR_COUNTRIES_DE:20}

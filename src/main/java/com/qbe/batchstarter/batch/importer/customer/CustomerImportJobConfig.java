@@ -21,7 +21,7 @@ public class CustomerImportJobConfig {
 
     private final PlatformTransactionManager transactionManager;
     private final FlatFileItemReader<CustomerDto> customerReader;
-    private final CustomerProcessorConfig customerProcessor;
+    private final CustomerProcessor customerProcessor;
     private final JpaItemWriter<CustomerEntity> customerWriter;
     private final BatchProperties batchProperties;
 

@@ -9,7 +9,7 @@ import com.qbe.batchstarter.mapper.CustomerMapper;
 import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
 
-class CustomerProcessorConfigTest {
+class CustomerProcessorTest {
 
     @Test
     void shouldMapCustomerDtoToEntity() {
@@ -18,7 +18,7 @@ class CustomerProcessorConfigTest {
 
         when(mapper.toEntity(any(CustomerDto.class))).thenReturn(entity);
 
-        CustomerProcessorConfig processor = new CustomerProcessorConfig(mapper);
+        CustomerProcessor processor = new CustomerProcessor(mapper);
         CustomerDto dto = new CustomerDto(1L, "John", "Doe", LocalDate.of(1990, 1, 1), "FR");
 
         CustomerEntity result = processor.process(dto);

@@ -18,8 +18,7 @@ import org.springframework.stereotype.Service;
 public class TransactionGeneratorService {
 
     private final TransactionGeneratorProperties transactionGeneratorProperties;
-
-    private final Random random = new Random();
+    private final Random random;
 
     public BankTransactionDto generate(long transactionId, BankAccountDto account, MerchantReference merchant) {
         return new BankTransactionDto(
@@ -33,7 +32,7 @@ public class TransactionGeneratorService {
                 randomStatus());
     }
 
-    private TransactionType randomTransactionType() {
+    protected TransactionType randomTransactionType() {
         int value = random.nextInt(100);
         if (value < transactionGeneratorProperties.cardPaymentRate()) {
             return TransactionType.CARD_PAYMENT;
@@ -41,8 +40,7 @@ public class TransactionGeneratorService {
         if (value < transactionGeneratorProperties.cardPaymentRate() + transactionGeneratorProperties.transferRate()) {
             return TransactionType.TRANSFER;
         }
-        if (value
-                < transactionGeneratorProperties.cardPaymentRate()
+        if (value < transactionGeneratorProperties.cardPaymentRate()
                         + transactionGeneratorProperties.transferRate()
                         + transactionGeneratorProperties.directDebitRate()) {
             return TransactionType.DIRECT_DEBIT;
@@ -50,7 +48,7 @@ public class TransactionGeneratorService {
         return TransactionType.CASH_WITHDRAWAL;
     }
 
-    private TransactionStatus randomStatus() {
+    protected TransactionStatus randomStatus() {
         int value = random.nextInt(100);
         if (value < 95) {
             return TransactionStatus.COMPLETED;
@@ -61,7 +59,7 @@ public class TransactionGeneratorService {
         return TransactionStatus.REJECTED;
     }
 
-    private LocalDateTime randomTransactionDate() {
+    protected LocalDateTime randomTransactionDate() {
         return LocalDateTime.now()
                 .minusDays(random.nextInt(365))
                 .minusHours(random.nextInt(24))
@@ -69,7 +67,7 @@ public class TransactionGeneratorService {
                 .minusSeconds(random.nextInt(60));
     }
 
-    private BigDecimal randomAmount(String category) {
+    protected BigDecimal randomAmount(String category) {
         BigDecimal amount;
         switch (category.toUpperCase()) {
             case "FOOD" -> amount = amountBetween(5, 120);
@@ -79,15 +77,13 @@ public class TransactionGeneratorService {
             case "ENTERTAINMENT" -> amount = amountBetween(5, 100);
             default -> amount = amountBetween(5, 300);
         }
-
-        // 0,2% de fraudes montant élevé
         if (random.nextDouble() < 0.002) {
             amount = amountBetween(10_000, 50_000);
         }
         return amount;
     }
 
-    private BigDecimal amountBetween(double min, double max) {
+    protected BigDecimal amountBetween(double min, double max) {
         return BigDecimal.valueOf(min + (max - min) * random.nextDouble()).setScale(2, RoundingMode.HALF_UP);
     }
 }

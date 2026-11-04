@@ -18,13 +18,13 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
-class TransactionProcessorConfigTest {
+class TransactionProcessorTest {
 
     @Test
     void shouldMapAndAssignAccount() {
         BankTransactionMapper mapper = mock(BankTransactionMapper.class);
         BankAccountRepository repository = mock(BankAccountRepository.class);
-        TransactionProcessorConfig processor = new TransactionProcessorConfig(mapper, repository);
+        TransactionProcessor processor = new TransactionProcessor(mapper, repository);
 
         BankTransactionDto dto = new BankTransactionDto(
                 1L,
@@ -50,11 +50,10 @@ class TransactionProcessorConfigTest {
 
     @Test
     void shouldThrowExceptionWhenAccountNotFound() {
-
         BankTransactionMapper mapper = mock(BankTransactionMapper.class);
         BankAccountRepository repository = mock(BankAccountRepository.class);
 
-        TransactionProcessorConfig processor = new TransactionProcessorConfig(mapper, repository);
+        TransactionProcessor processor = new TransactionProcessor(mapper, repository);
 
         BankTransactionDto dto = new BankTransactionDto(
                 1L,
@@ -67,7 +66,6 @@ class TransactionProcessorConfigTest {
                 TransactionStatus.COMPLETED);
 
         when(mapper.toEntity(dto)).thenReturn(new BankTransactionEntity());
-
         when(repository.findByIban("UNKNOWN")).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> processor.process(dto))

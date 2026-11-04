@@ -22,6 +22,13 @@ class DataWorkflowJobConfigurationTest {
         Step customerImportStep = mock(Step.class);
         Step accountImportStep = mock(Step.class);
         Step transactionImportStep = mock(Step.class);
+        Step customerEnrichmentStep = mock(Step.class);
+        Step fraudDetectionStep = mock(Step.class);
+        Step globalReportStep = mock(Step.class);
+        Step customerReportStep = mock(Step.class);
+        Step bestClientReportStep = mock(Step.class);
+        Step transactionReportStep = mock(Step.class);
+        Step fraudReportStep = mock(Step.class);
 
         Job job = configuration.dataWorkflowJob(
                 jobRepository,
@@ -30,7 +37,14 @@ class DataWorkflowJobConfigurationTest {
                 generateTransactionsStep,
                 customerImportStep,
                 accountImportStep,
-                transactionImportStep);
+                transactionImportStep,
+                customerEnrichmentStep,
+                fraudDetectionStep,
+                globalReportStep,
+                customerReportStep,
+                bestClientReportStep,
+                fraudReportStep,
+                transactionReportStep);
 
         assertThat(job).isNotNull();
         assertThat(job.getName()).isEqualTo("dataWorkflowJob");

@@ -19,6 +19,8 @@ public class ParallelConfiguration {
         executor.setCorePoolSize(batchProperties.parallelThreads());
         executor.setMaxPoolSize(batchProperties.parallelThreads());
         executor.setThreadNamePrefix("batch-");
+        executor.setWaitForTasksToCompleteOnShutdown(true);
+        executor.setAwaitTerminationSeconds(30);
         executor.initialize();
         return executor;
     }

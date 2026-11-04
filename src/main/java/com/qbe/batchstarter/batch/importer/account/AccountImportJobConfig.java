@@ -27,7 +27,7 @@ public class AccountImportJobConfig {
 
     private final PlatformTransactionManager transactionManager;
     private final FlatFileItemReader<BankAccountDto> accountReader;
-    private final AccountProcessorConfig accountProcessor;
+    private final AccountProcessor accountProcessor;
     private final JpaItemWriter<BankAccountEntity> accountWriter;
     private final BatchProperties batchProperties;
 

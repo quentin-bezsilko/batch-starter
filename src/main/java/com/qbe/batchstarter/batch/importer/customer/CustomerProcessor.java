@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class CustomerProcessorConfig implements ItemProcessor<CustomerDto, CustomerEntity> {
+public class CustomerProcessor implements ItemProcessor<CustomerDto, CustomerEntity> {
 
     private final CustomerMapper customerMapper;
 

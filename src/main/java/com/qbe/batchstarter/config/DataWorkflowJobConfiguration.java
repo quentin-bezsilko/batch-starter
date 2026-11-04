@@ -21,7 +21,14 @@ public class DataWorkflowJobConfiguration {
             @Qualifier("generateTransactionsStep") Step generateTransactionsStep,
             @Qualifier("customerImportStep") Step customerImportStep,
             @Qualifier("accountImportStep") Step accountImportStep,
-            @Qualifier("transactionImportStep") Step transactionImportStep) {
+            @Qualifier("transactionImportStep") Step transactionImportStep,
+            @Qualifier("customerEnrichmentStep") Step customerEnrichmentStep,
+            @Qualifier("fraudDetectionStep") Step fraudDetectionStep,
+            @Qualifier("globalReportStep") Step globalReportStep,
+            @Qualifier("customerReportStep") Step customerReportStep,
+            @Qualifier("bestClientReportStep") Step bestClientReportStep,
+            @Qualifier("fraudReportStep") Step fraudReportStep,
+            @Qualifier("transactionReportStep") Step transactionReportStep) {
         return new JobBuilder("dataWorkflowJob", jobRepository)
                 .start(generateCustomersStep)
                 .next(generateAccountsStep)
@@ -29,6 +36,13 @@ public class DataWorkflowJobConfiguration {
                 .next(customerImportStep)
                 .next(accountImportStep)
                 .next(transactionImportStep)
+                .next(customerEnrichmentStep)
+                .next(fraudDetectionStep)
+                .next(globalReportStep)
+                .next(customerReportStep)
+                .next(bestClientReportStep)
+                .next(fraudReportStep)
+                .next(transactionReportStep)
                 .build();
     }
 }

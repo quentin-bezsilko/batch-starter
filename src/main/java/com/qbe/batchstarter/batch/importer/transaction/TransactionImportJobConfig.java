@@ -23,7 +23,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 public class TransactionImportJobConfig {
 
     private final PlatformTransactionManager transactionManager;
-    private final TransactionProcessorConfig transactionProcessor;
+    private final TransactionProcessor transactionProcessor;
     private final JpaItemWriter<BankTransactionEntity> transactionWriter;
     private final BatchProperties batchProperties;
 

@@ -326,19 +326,19 @@ Ce qu'il faudrait faire pour avoir un gain supplémentaire :
 4. 4 workers
 
 Sprint 7
-✅ Enrichissement (batch)
-✅ Détection de fraude (batch)
-✅ Reporting (batch)
+✅ Enrichissement (ok)
+✅ Détection de fraude (ok)
+✅ Reporting (ok)
 ✅ Prometheus
 ✅ Grafana
 ✅ Endpoint /api/batch/status
 
 Sprint 8 :
-✅ Finaliser les TU
+✅ Finaliser les TU (ok)
 ✅ Intégration Sonar
 ✅ Endpoint /api/batch/status
 ✅ Loki, Prometheus, Opentelemetry (profils), Grafana
 ✅ README professionnel
 
 TODO :
-- Reprendre sprint 7
+- Poursuivre sprint 7

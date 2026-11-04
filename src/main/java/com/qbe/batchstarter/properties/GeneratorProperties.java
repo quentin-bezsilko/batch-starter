@@ -8,4 +8,11 @@ public record GeneratorProperties(
         String outputDirectory,
         String customerFileName,
         String accountFileName,
-        String transactionFileName) {}
+        String transactionFileName,
+        String customerEnrichmentFileName,
+        String globalReportFileName,
+        String customerReportFileName,
+        String bestClientReportFileName,
+        String accountReportFileName,
+        String transactionReportFileName,
+        String fraudReportFileName) {}

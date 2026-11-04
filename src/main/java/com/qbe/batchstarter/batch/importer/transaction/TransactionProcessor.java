@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class TransactionProcessorConfig implements ItemProcessor<BankTransactionDto, BankTransactionEntity> {
+public class TransactionProcessor implements ItemProcessor<BankTransactionDto, BankTransactionEntity> {
 
     private final BankTransactionMapper bankTransactionMapper;
     private final BankAccountRepository bankAccountRepository;

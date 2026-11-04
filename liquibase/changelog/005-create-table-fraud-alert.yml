@@ -1,0 +1,55 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-table-fraud-alert
+      author: qbe
+      changes:
+        - createSequence:
+            sequenceName: FRAUD_ALERT_SEQ
+            startValue: 1
+            incrementBy: 1
+        - createTable:
+            tableName: FRAUD_ALERT
+            columns:
+              - column:
+                  name: ID
+                  type: NUMBER(19,0)
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: PK_FRAUD_ALERT
+                    nullable: false
+              - column:
+                  name: TRANSACTION_ID
+                  type: NUMBER(19,0)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: ACCOUNT_ID
+                  type: NUMBER(19,0)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: FRAUD_TYPE
+                  type: VARCHAR2(50 CHAR)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: AMOUNT
+                  type: NUMBER(19,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: REASON
+                  type: VARCHAR2(255 CHAR)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: DETECTION_DATE
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: VERSION
+                  type: NUMBER(19,0)
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false

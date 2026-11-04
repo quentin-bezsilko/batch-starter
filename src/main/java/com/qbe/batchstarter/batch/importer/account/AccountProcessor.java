@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class AccountProcessorConfig implements ItemProcessor<BankAccountDto, BankAccountEntity> {
+public class AccountProcessor implements ItemProcessor<BankAccountDto, BankAccountEntity> {
 
     private final BankAccountMapper bankAccountMapper;
     private final CustomerRepository customerRepository;

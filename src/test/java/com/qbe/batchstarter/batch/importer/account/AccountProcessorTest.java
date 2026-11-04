@@ -23,7 +23,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
 
-public class AccountProcessorConfigTest {
+public class AccountProcessorTest {
 
     @Test
     void shouldMapAndAssignCustomer() {
@@ -41,8 +41,7 @@ public class AccountProcessorConfigTest {
         BankAccountEntity entity = new BankAccountEntity();
         when(mapper.toEntity(any())).thenReturn(entity);
 
-        AccountProcessorConfig processor =
-                new AccountProcessorConfig(mapper, repository, generatorProperties, accountProperties);
+        AccountProcessor processor = new AccountProcessor(mapper, repository, generatorProperties, accountProperties);
         BankAccountDto dto = new BankAccountDto(
                 1L, 10L, "FR123", AccountType.CHECKING, "EUR", BigDecimal.TEN, AccountStatus.ACTIVE, LocalDate.now());
         BankAccountEntity result = processor.process(dto);
@@ -54,7 +53,7 @@ public class AccountProcessorConfigTest {
 
     @Test
     void shouldThrowInvalidBankAccountExceptionWhenIbanIsBlank() {
-        AccountProcessorConfig processor = new AccountProcessorConfig(
+        AccountProcessor processor = new AccountProcessor(
                 mock(BankAccountMapper.class),
                 mock(CustomerRepository.class),
                 mock(GeneratorProperties.class),
@@ -78,8 +77,7 @@ public class AccountProcessorConfigTest {
         when(generatorProperties.simulateRetry()).thenReturn(true);
         when(accountProperties.crashAfter()).thenReturn(0);
 
-        AccountProcessorConfig processor =
-                new AccountProcessorConfig(mapper, repository, generatorProperties, accountProperties);
+        AccountProcessor processor = new AccountProcessor(mapper, repository, generatorProperties, accountProperties);
         BankAccountDto dto = new BankAccountDto(
                 1L, 1L, "FR123", AccountType.CHECKING, "EUR", BigDecimal.ONE, AccountStatus.ACTIVE, LocalDate.now());
         assertThatThrownBy(() -> processor.process(dto)).isInstanceOf(TemporaryException.class);
@@ -103,8 +101,7 @@ public class AccountProcessorConfigTest {
         when(mapper.toEntity(any())).thenReturn(new BankAccountEntity());
         when(repository.getReferenceById(anyLong())).thenReturn(mock(CustomerEntity.class));
 
-        AccountProcessorConfig processor =
-                new AccountProcessorConfig(mapper, repository, generatorProperties, accountProperties);
+        AccountProcessor processor = new AccountProcessor(mapper, repository, generatorProperties, accountProperties);
         BankAccountDto dto = new BankAccountDto(
                 1L, 1L, "FR123", AccountType.CHECKING, "EUR", BigDecimal.ONE, AccountStatus.ACTIVE, LocalDate.now());
         processor.process(dto);

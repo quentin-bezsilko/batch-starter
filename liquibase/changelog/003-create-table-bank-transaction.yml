@@ -49,3 +49,11 @@ databaseChangeLog:
             sequenceName: BANK_TRANSACTION_SEQ
             startValue: 1
             incrementBy: 1
+        - createIndex:
+            indexName: IDX_BT_ACC_DATE
+            tableName: BANK_TRANSACTION
+            columns:
+              - column:
+                  name: ACCOUNT_ID
+              - column:
+                  name: TRANSACTION_DATE

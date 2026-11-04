@@ -19,7 +19,7 @@ class CustomerImportJobConfigTest {
         CustomerImportJobConfig config = new CustomerImportJobConfig(
                 mock(PlatformTransactionManager.class),
                 mock(FlatFileItemReader.class),
-                mock(CustomerProcessorConfig.class),
+                mock(CustomerProcessor.class),
                 mock(JpaItemWriter.class),
                 mock(BatchProperties.class));
         Job job = config.customerImportJob(mock(JobRepository.class), mock(Step.class));
