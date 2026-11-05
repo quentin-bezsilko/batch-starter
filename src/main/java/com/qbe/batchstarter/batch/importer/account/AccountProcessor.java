@@ -5,6 +5,7 @@ import com.qbe.batchstarter.entity.BankAccountEntity;
 import com.qbe.batchstarter.exception.InvalidBankAccountException;
 import com.qbe.batchstarter.exception.TemporaryException;
 import com.qbe.batchstarter.mapper.BankAccountMapper;
+import com.qbe.batchstarter.metrics.Monitored;
 import com.qbe.batchstarter.properties.AccountGeneratorProperties;
 import com.qbe.batchstarter.properties.GeneratorProperties;
 import com.qbe.batchstarter.repository.CustomerRepository;
@@ -30,6 +31,7 @@ public class AccountProcessor implements ItemProcessor<BankAccountDto, BankAccou
     private final AtomicInteger processed = new AtomicInteger();
 
     @Override
+    @Monitored(name = "account.processor")
     public BankAccountEntity process(@NonNull BankAccountDto item) {
         int processedLong = processed.incrementAndGet();
         if (accountGeneratorProperties.crashAfter() > 0 && processedLong == accountGeneratorProperties.crashAfter()) {

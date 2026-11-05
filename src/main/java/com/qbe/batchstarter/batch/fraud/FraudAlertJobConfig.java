@@ -2,6 +2,7 @@ package com.qbe.batchstarter.batch.fraud;
 
 import com.qbe.batchstarter.entity.BankTransactionEntity;
 import com.qbe.batchstarter.entity.FraudAlertEntity;
+import com.qbe.batchstarter.listener.ObservedStepListener;
 import com.qbe.batchstarter.properties.BatchProperties;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.Step;
@@ -22,13 +23,15 @@ public class FraudAlertJobConfig {
             JpaPagingItemReader<BankTransactionEntity> fraudReader,
             FraudAlertProcessor fraudProcessor,
             JpaItemWriter<FraudAlertEntity> fraudAlertWriter,
-            BatchProperties properties) {
+            BatchProperties properties,
+            ObservedStepListener listener) {
 
         return new StepBuilder("fraudDetectionStep", jobRepository)
                 .<BankTransactionEntity, FraudAlertEntity>chunk(properties.chunkSize())
                 .reader(fraudReader)
                 .processor(fraudProcessor)
                 .writer(fraudAlertWriter)
+                .listener(listener)
                 .transactionManager(transactionManager)
                 .build();
     }

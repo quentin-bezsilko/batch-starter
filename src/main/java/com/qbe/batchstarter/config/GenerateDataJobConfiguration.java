@@ -1,5 +1,6 @@
 package com.qbe.batchstarter.config;
 
+import com.qbe.batchstarter.listener.ObservedJobListener;
 import org.springframework.batch.core.job.Job;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
@@ -16,8 +17,10 @@ public class GenerateDataJobConfiguration {
             JobRepository jobRepository,
             @Qualifier("generateCustomersStep") Step generateCustomersStep,
             @Qualifier("generateAccountsStep") Step generateAccountsStep,
-            @Qualifier("generateTransactionsStep") Step generateTransactionsStep) {
+            @Qualifier("generateTransactionsStep") Step generateTransactionsStep,
+            ObservedJobListener listener) {
         return new JobBuilder("generateDataJob", jobRepository)
+                .listener(listener)
                 .start(generateCustomersStep)
                 .next(generateAccountsStep)
                 .next(generateTransactionsStep)

@@ -2,6 +2,7 @@ package com.qbe.batchstarter.batch.reporting.customer;
 
 import com.qbe.batchstarter.dto.CustomerReportDto;
 import com.qbe.batchstarter.dto.CustomerReportExportDto;
+import com.qbe.batchstarter.metrics.Monitored;
 import java.time.LocalDate;
 import java.time.Period;
 import org.springframework.batch.infrastructure.item.ItemProcessor;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Component;
 public class CustomerReportProcessor implements ItemProcessor<CustomerReportDto, CustomerReportExportDto> {
 
     @Override
+    @Monitored(name = "customer.report.processor")
     public CustomerReportExportDto process(CustomerReportDto item) {
         Integer age = item.birthDate() == null
                 ? null

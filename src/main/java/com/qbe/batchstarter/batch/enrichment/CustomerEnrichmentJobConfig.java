@@ -2,6 +2,7 @@ package com.qbe.batchstarter.batch.enrichment;
 
 import com.qbe.batchstarter.dto.CustomerEnrichmentDto;
 import com.qbe.batchstarter.entity.CustomerEntity;
+import com.qbe.batchstarter.listener.ObservedStepListener;
 import com.qbe.batchstarter.properties.BatchProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.repository.JobRepository;
@@ -24,12 +25,13 @@ public class CustomerEnrichmentJobConfig {
     private final BatchProperties batchProperties;
 
     @Bean
-    public Step customerEnrichmentStep(JobRepository jobRepository) {
+    public Step customerEnrichmentStep(JobRepository jobRepository, ObservedStepListener listener) {
         return new StepBuilder("customerEnrichmentStep", jobRepository)
                 .<CustomerEntity, CustomerEnrichmentDto>chunk(batchProperties.chunkSize())
                 .reader(customerEnrichmentReader)
                 .processor(customerProcessor)
                 .writer(customerEnrichmentWriter)
+                .listener(listener)
                 .transactionManager(transactionManager)
                 .build();
     }

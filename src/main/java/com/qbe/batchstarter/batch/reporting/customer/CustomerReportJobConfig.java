@@ -2,6 +2,7 @@ package com.qbe.batchstarter.batch.reporting.customer;
 
 import com.qbe.batchstarter.dto.CustomerReportDto;
 import com.qbe.batchstarter.dto.CustomerReportExportDto;
+import com.qbe.batchstarter.listener.ObservedStepListener;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.Step;
 import org.springframework.batch.core.step.builder.StepBuilder;
@@ -21,13 +22,15 @@ public class CustomerReportJobConfig {
             PlatformTransactionManager transactionManager,
             ListItemReader<CustomerReportDto> customerReportReader,
             ItemProcessor<CustomerReportDto, CustomerReportExportDto> customerReportProcessor,
-            FlatFileItemWriter<CustomerReportExportDto> customerReportWriter) {
+            FlatFileItemWriter<CustomerReportExportDto> customerReportWriter,
+            ObservedStepListener listener) {
 
         return new StepBuilder("customerReportStep", jobRepository)
                 .<CustomerReportDto, CustomerReportExportDto>chunk(100)
                 .reader(customerReportReader)
                 .processor(customerReportProcessor)
                 .writer(customerReportWriter)
+                .listener(listener)
                 .transactionManager(transactionManager)
                 .build();
     }

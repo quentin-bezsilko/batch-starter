@@ -5,6 +5,7 @@ import static org.mockito.Mockito.when;
 
 import com.qbe.batchstarter.dto.CustomerEnrichmentDto;
 import com.qbe.batchstarter.entity.CustomerEntity;
+import com.qbe.batchstarter.listener.ObservedStepListener;
 import com.qbe.batchstarter.properties.BatchProperties;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -30,7 +31,9 @@ class CustomerEnrichmentJobConfigTest {
                 new CustomerEnrichmentJobConfig(transactionManager, reader, processor, writer, properties);
         JobRepository repository = Mockito.mock(JobRepository.class);
 
-        Step step = config.customerEnrichmentStep(repository);
+        ObservedStepListener observedStepListener = Mockito.mock(ObservedStepListener.class);
+
+        Step step = config.customerEnrichmentStep(repository, observedStepListener);
         assertThat(step).isNotNull();
         assertThat(step.getName()).isEqualTo("customerEnrichmentStep");
     }

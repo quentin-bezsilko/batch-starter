@@ -3,6 +3,7 @@ package com.qbe.batchstarter.batch.importer.customer;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
+import com.qbe.batchstarter.listener.ObservedJobListener;
 import com.qbe.batchstarter.properties.BatchProperties;
 import org.junit.jupiter.api.Test;
 import org.springframework.batch.core.job.Job;
@@ -22,7 +23,8 @@ class CustomerImportJobConfigTest {
                 mock(CustomerProcessor.class),
                 mock(JpaItemWriter.class),
                 mock(BatchProperties.class));
-        Job job = config.customerImportJob(mock(JobRepository.class), mock(Step.class));
+        Job job =
+                config.customerImportJob(mock(JobRepository.class), mock(Step.class), mock(ObservedJobListener.class));
 
         assertThat(job).isNotNull();
         assertThat(job.getName()).isEqualTo("customerImportJob");

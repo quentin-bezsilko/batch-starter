@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 
 import com.qbe.batchstarter.entity.BankTransactionEntity;
 import com.qbe.batchstarter.entity.FraudAlertEntity;
+import com.qbe.batchstarter.listener.ObservedStepListener;
 import com.qbe.batchstarter.properties.BatchProperties;
 import org.junit.jupiter.api.Test;
 import org.springframework.batch.core.repository.JobRepository;
@@ -30,7 +31,10 @@ class FraudAlertJobConfigTest {
         BatchProperties properties = mock(BatchProperties.class);
         when(properties.chunkSize()).thenReturn(100);
 
-        Step step = config.fraudDetectionStep(jobRepository, transactionManager, reader, processor, writer, properties);
+        ObservedStepListener observedStepListener = mock(ObservedStepListener.class);
+
+        Step step = config.fraudDetectionStep(
+                jobRepository, transactionManager, reader, processor, writer, properties, observedStepListener);
 
         assertThat(step).isNotNull();
         assertThat(step.getName()).isEqualTo("fraudDetectionStep");

@@ -1,6 +1,7 @@
 package com.qbe.batchstarter.batch.reporting.bestclients;
 
 import com.qbe.batchstarter.dto.BestClientReportDto;
+import com.qbe.batchstarter.listener.ObservedStepListener;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.Step;
 import org.springframework.batch.core.step.builder.StepBuilder;
@@ -18,12 +19,14 @@ public class BestClientReportJobConfig {
             JobRepository jobRepository,
             PlatformTransactionManager transactionManager,
             ListItemReader<BestClientReportDto> bestClientReportReader,
-            FlatFileItemWriter<BestClientReportDto> bestClientReportWriter) {
+            FlatFileItemWriter<BestClientReportDto> bestClientReportWriter,
+            ObservedStepListener listener) {
 
         return new StepBuilder("bestClientReportStep", jobRepository)
                 .<BestClientReportDto, BestClientReportDto>chunk(20)
                 .reader(bestClientReportReader)
                 .writer(bestClientReportWriter)
+                .listener(listener)
                 .transactionManager(transactionManager)
                 .build();
     }

@@ -4,6 +4,8 @@ import com.qbe.batchstarter.dto.BankAccountDto;
 import com.qbe.batchstarter.entity.BankAccountEntity;
 import com.qbe.batchstarter.exception.InvalidBankAccountException;
 import com.qbe.batchstarter.exception.TemporaryException;
+import com.qbe.batchstarter.listener.ObservedJobListener;
+import com.qbe.batchstarter.listener.ObservedStepListener;
 import com.qbe.batchstarter.properties.BatchProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.job.Job;
@@ -40,13 +42,15 @@ public class AccountImportJobConfig {
     public Step accountImportStep(
             JobRepository jobRepository,
             ObjectProvider<AsyncTaskExecutor> taskExecutorProvider,
-            SynchronizedItemStreamReader<BankAccountDto> accountReaderSync) {
+            SynchronizedItemStreamReader<BankAccountDto> accountReaderSync,
+            ObservedStepListener listener) {
         ChunkOrientedStepBuilder<BankAccountDto, BankAccountEntity> builder = new StepBuilder(
                         "accountImportStep", jobRepository)
                 .<BankAccountDto, BankAccountEntity>chunk(batchProperties.chunkSize())
                 .reader(accountReaderSync)
                 .processor(accountProcessor)
                 .writer(accountWriter)
+                .listener(listener)
                 .faultTolerant()
                 .skip(InvalidBankAccountException.class)
                 .skipLimit(100)
@@ -59,8 +63,9 @@ public class AccountImportJobConfig {
     }
 
     @Bean
-    public Job accountImportJob(JobRepository jobRepository, Step accountImportStep) {
+    public Job accountImportJob(JobRepository jobRepository, Step accountImportStep, ObservedJobListener listener) {
         return new JobBuilder("accountImportJob", jobRepository)
+                .listener(listener)
                 .start(accountImportStep)
                 .build();
     }

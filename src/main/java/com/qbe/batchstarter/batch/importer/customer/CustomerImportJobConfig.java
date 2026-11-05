@@ -2,6 +2,8 @@ package com.qbe.batchstarter.batch.importer.customer;
 
 import com.qbe.batchstarter.dto.CustomerDto;
 import com.qbe.batchstarter.entity.CustomerEntity;
+import com.qbe.batchstarter.listener.ObservedJobListener;
+import com.qbe.batchstarter.listener.ObservedStepListener;
 import com.qbe.batchstarter.properties.BatchProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.job.Job;
@@ -26,19 +28,21 @@ public class CustomerImportJobConfig {
     private final BatchProperties batchProperties;
 
     @Bean
-    public Step customerImportStep(JobRepository jobRepository) {
+    public Step customerImportStep(JobRepository jobRepository, ObservedStepListener listener) {
         return new StepBuilder("customerImportStep", jobRepository)
                 .<CustomerDto, CustomerEntity>chunk(batchProperties.chunkSize())
                 .reader(customerReader)
                 .processor(customerProcessor)
                 .writer(customerWriter)
+                .listener(listener)
                 .transactionManager(transactionManager)
                 .build();
     }
 
     @Bean
-    public Job customerImportJob(JobRepository jobRepository, Step customerImportStep) {
+    public Job customerImportJob(JobRepository jobRepository, Step customerImportStep, ObservedJobListener listener) {
         return new JobBuilder("customerImportJob", jobRepository)
+                .listener(listener)
                 .start(customerImportStep)
                 .build();
     }

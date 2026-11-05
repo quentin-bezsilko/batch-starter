@@ -3,6 +3,7 @@ package com.qbe.batchstarter.config;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
+import com.qbe.batchstarter.listener.ObservedJobListener;
 import org.junit.jupiter.api.Test;
 import org.springframework.batch.core.job.Job;
 import org.springframework.batch.core.repository.JobRepository;
@@ -29,6 +30,7 @@ class DataWorkflowJobConfigurationTest {
         Step bestClientReportStep = mock(Step.class);
         Step transactionReportStep = mock(Step.class);
         Step fraudReportStep = mock(Step.class);
+        ObservedJobListener observedJobListener = mock(ObservedJobListener.class);
 
         Job job = configuration.dataWorkflowJob(
                 jobRepository,
@@ -44,7 +46,8 @@ class DataWorkflowJobConfigurationTest {
                 customerReportStep,
                 bestClientReportStep,
                 fraudReportStep,
-                transactionReportStep);
+                transactionReportStep,
+                observedJobListener);
 
         assertThat(job).isNotNull();
         assertThat(job.getName()).isEqualTo("dataWorkflowJob");

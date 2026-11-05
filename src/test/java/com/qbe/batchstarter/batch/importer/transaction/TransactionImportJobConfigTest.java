@@ -5,6 +5,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.qbe.batchstarter.entity.BankTransactionEntity;
+import com.qbe.batchstarter.listener.ObservedJobListener;
+import com.qbe.batchstarter.listener.ObservedStepListener;
 import com.qbe.batchstarter.partition.TransactionPartitioner;
 import com.qbe.batchstarter.properties.BatchProperties;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,7 +45,8 @@ class TransactionImportJobConfigTest {
 
     @Test
     void shouldCreateTransactionImportJob() {
-        Job job = config.transactionImportJob(mock(JobRepository.class), mock(Step.class));
+        Job job = config.transactionImportJob(
+                mock(JobRepository.class), mock(Step.class), mock(ObservedJobListener.class));
         assertThat(job).isNotNull();
         assertThat(job.getName()).isEqualTo("transactionImportJob");
     }
@@ -62,7 +65,8 @@ class TransactionImportJobConfigTest {
 
     @Test
     void shouldCreateTransactionWorkerStep() {
-        Step step = config.transactionWorkerStep(mock(JobRepository.class), mock(ItemStreamReader.class));
+        Step step = config.transactionWorkerStep(
+                mock(JobRepository.class), mock(ItemStreamReader.class), mock(ObservedStepListener.class));
         assertThat(step).isNotNull();
         assertThat(step.getName()).isEqualTo("transactionWorkerStep");
     }

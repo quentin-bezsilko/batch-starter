@@ -1,7 +1,7 @@
 FROM eclipse-temurin:25-jre
 
-WORKDIR /app
+COPY docker/app/opentelemetry-javaagent.jar /opt/opentelemetry-javaagent.jar
 
-COPY target/batchstarter-0.0.1-SNAPSHOT.jar app.jar
+COPY target/*.jar /app.jar
 
-ENTRYPOINT ["java","-jar","app.jar"]
+ENTRYPOINT ["java", "-javaagent:/opt/opentelemetry-javaagent.jar", "-jar", "/app.jar"]

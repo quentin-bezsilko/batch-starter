@@ -5,6 +5,7 @@ import static org.mockito.Mockito.mock;
 
 import com.qbe.batchstarter.dto.CustomerReportDto;
 import com.qbe.batchstarter.dto.CustomerReportExportDto;
+import com.qbe.batchstarter.listener.ObservedStepListener;
 import org.junit.jupiter.api.Test;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.Step;
@@ -25,8 +26,9 @@ class CustomerReportJobConfigTest {
         ListItemReader<CustomerReportDto> reader = mock(ListItemReader.class);
         ItemProcessor<CustomerReportDto, CustomerReportExportDto> processor = mock(ItemProcessor.class);
         FlatFileItemWriter<CustomerReportExportDto> writer = mock(FlatFileItemWriter.class);
+        ObservedStepListener listener = mock(ObservedStepListener.class);
 
-        Step step = config.customerReportStep(jobRepository, transactionManager, reader, processor, writer);
+        Step step = config.customerReportStep(jobRepository, transactionManager, reader, processor, writer, listener);
         assertThat(step).isNotNull();
         assertThat(step.getName()).isEqualTo("customerReportStep");
     }

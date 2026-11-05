@@ -1,5 +1,6 @@
 package com.qbe.batchstarter.config;
 
+import com.qbe.batchstarter.listener.ObservedJobListener;
 import org.springframework.batch.core.job.Job;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
@@ -18,8 +19,10 @@ public class ReportJobConfiguration {
             @Qualifier("customerReportStep") Step customerReportStep,
             @Qualifier("bestClientReportStep") Step bestClientReportStep,
             @Qualifier("fraudReportStep") Step fraudReportStep,
-            @Qualifier("transactionReportStep") Step transactionReportStep) {
+            @Qualifier("transactionReportStep") Step transactionReportStep,
+            ObservedJobListener listener) {
         return new JobBuilder("reportJob", jobRepository)
+                .listener(listener)
                 .start(globalReportStep)
                 .next(customerReportStep)
                 .next(bestClientReportStep)

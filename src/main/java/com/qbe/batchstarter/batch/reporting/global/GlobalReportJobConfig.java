@@ -1,6 +1,7 @@
 package com.qbe.batchstarter.batch.reporting.global;
 
 import com.qbe.batchstarter.dto.GlobalReportDto;
+import com.qbe.batchstarter.listener.ObservedStepListener;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.Step;
 import org.springframework.batch.core.step.builder.StepBuilder;
@@ -18,12 +19,14 @@ public class GlobalReportJobConfig {
             JobRepository jobRepository,
             PlatformTransactionManager transactionManager,
             ListItemReader<GlobalReportDto> globalReportReader,
-            FlatFileItemWriter<GlobalReportDto> globalReportWriter) {
+            FlatFileItemWriter<GlobalReportDto> globalReportWriter,
+            ObservedStepListener listener) {
 
         return new StepBuilder("globalReportStep", jobRepository)
                 .<GlobalReportDto, GlobalReportDto>chunk(1)
                 .reader(globalReportReader)
                 .writer(globalReportWriter)
+                .listener(listener)
                 .transactionManager(transactionManager)
                 .build();
     }

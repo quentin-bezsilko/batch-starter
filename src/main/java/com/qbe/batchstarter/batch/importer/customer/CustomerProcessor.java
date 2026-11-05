@@ -3,6 +3,7 @@ package com.qbe.batchstarter.batch.importer.customer;
 import com.qbe.batchstarter.dto.CustomerDto;
 import com.qbe.batchstarter.entity.CustomerEntity;
 import com.qbe.batchstarter.mapper.CustomerMapper;
+import com.qbe.batchstarter.metrics.Monitored;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
 import org.springframework.batch.infrastructure.item.ItemProcessor;
@@ -15,6 +16,7 @@ public class CustomerProcessor implements ItemProcessor<CustomerDto, CustomerEnt
     private final CustomerMapper customerMapper;
 
     @Override
+    @Monitored(name = "customer.processor")
     public CustomerEntity process(@NonNull CustomerDto customer) {
         return customerMapper.toEntity(customer);
     }

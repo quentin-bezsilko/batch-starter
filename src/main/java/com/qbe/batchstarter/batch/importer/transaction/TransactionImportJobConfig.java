@@ -3,6 +3,8 @@ package com.qbe.batchstarter.batch.importer.transaction;
 import com.qbe.batchstarter.dto.BankTransactionDto;
 import com.qbe.batchstarter.entity.BankTransactionEntity;
 import com.qbe.batchstarter.exception.InvalidBankTransactionException;
+import com.qbe.batchstarter.listener.ObservedJobListener;
+import com.qbe.batchstarter.listener.ObservedStepListener;
 import com.qbe.batchstarter.partition.TransactionPartitioner;
 import com.qbe.batchstarter.properties.BatchProperties;
 import lombok.RequiredArgsConstructor;
@@ -43,12 +45,15 @@ public class TransactionImportJobConfig {
 
     @Bean
     public Step transactionWorkerStep(
-            JobRepository jobRepository, ItemStreamReader<BankTransactionDto> transactionReader) {
+            JobRepository jobRepository,
+            ItemStreamReader<BankTransactionDto> transactionReader,
+            ObservedStepListener listener) {
         return new StepBuilder("transactionWorkerStep", jobRepository)
                 .<BankTransactionDto, BankTransactionEntity>chunk(batchProperties.chunkSize())
                 .reader(transactionReader)
                 .processor(transactionProcessor)
                 .writer(transactionWriter)
+                .listener(listener)
                 .faultTolerant()
                 .skip(InvalidBankTransactionException.class)
                 .skipLimit(batchProperties.skipLimit())
@@ -57,8 +62,10 @@ public class TransactionImportJobConfig {
     }
 
     @Bean
-    public Job transactionImportJob(JobRepository jobRepository, Step transactionImportStep) {
+    public Job transactionImportJob(
+            JobRepository jobRepository, Step transactionImportStep, ObservedJobListener listener) {
         return new JobBuilder("transactionImportJob", jobRepository)
+                .listener(listener)
                 .start(transactionImportStep)
                 .build();
     }

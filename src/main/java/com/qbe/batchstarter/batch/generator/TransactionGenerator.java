@@ -1,5 +1,6 @@
 package com.qbe.batchstarter.batch.generator;
 
+import com.qbe.batchstarter.listener.ObservedStepListener;
 import com.qbe.batchstarter.tasklet.TransactionGenerationTasklet;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.Step;
@@ -15,9 +16,11 @@ public class TransactionGenerator {
     public Step generateTransactionsStep(
             JobRepository jobRepository,
             PlatformTransactionManager transactionManager,
-            TransactionGenerationTasklet tasklet) {
+            TransactionGenerationTasklet tasklet,
+            ObservedStepListener listener) {
         return new StepBuilder("generateTransactionsStep", jobRepository)
                 .tasklet(tasklet, transactionManager)
+                .listener(listener)
                 .build();
     }
 }

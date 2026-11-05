@@ -1,5 +1,6 @@
 package com.qbe.batchstarter.config;
 
+import com.qbe.batchstarter.listener.ObservedJobListener;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.job.Job;
 import org.springframework.batch.core.job.builder.JobBuilder;
@@ -28,8 +29,10 @@ public class DataWorkflowJobConfiguration {
             @Qualifier("customerReportStep") Step customerReportStep,
             @Qualifier("bestClientReportStep") Step bestClientReportStep,
             @Qualifier("fraudReportStep") Step fraudReportStep,
-            @Qualifier("transactionReportStep") Step transactionReportStep) {
+            @Qualifier("transactionReportStep") Step transactionReportStep,
+            ObservedJobListener listener) {
         return new JobBuilder("dataWorkflowJob", jobRepository)
+                .listener(listener)
                 .start(generateCustomersStep)
                 .next(generateAccountsStep)
                 .next(generateTransactionsStep)

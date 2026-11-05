@@ -5,6 +5,7 @@ import com.qbe.batchstarter.entity.BankAccountEntity;
 import com.qbe.batchstarter.entity.BankTransactionEntity;
 import com.qbe.batchstarter.exception.InvalidBankTransactionException;
 import com.qbe.batchstarter.mapper.BankTransactionMapper;
+import com.qbe.batchstarter.metrics.Monitored;
 import com.qbe.batchstarter.repository.BankAccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
@@ -19,6 +20,7 @@ public class TransactionProcessor implements ItemProcessor<BankTransactionDto, B
     private final BankAccountRepository bankAccountRepository;
 
     @Override
+    @Monitored(name = "transaction.processor")
     public BankTransactionEntity process(@NonNull BankTransactionDto dto) throws InvalidBankTransactionException {
         BankTransactionEntity entity = bankTransactionMapper.toEntity(dto);
         BankAccountEntity account = bankAccountRepository

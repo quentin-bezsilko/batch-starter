@@ -1,6 +1,7 @@
 package com.qbe.batchstarter.batch.reporting.transaction;
 
 import com.qbe.batchstarter.dto.TransactionReportDto;
+import com.qbe.batchstarter.listener.ObservedStepListener;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.Step;
@@ -20,12 +21,13 @@ public class TransactionReportJobConfig {
             JobRepository jobRepository,
             PlatformTransactionManager transactionManager,
             ListItemReader<TransactionReportDto> transactionReportReader,
-            FlatFileItemWriter<TransactionReportDto> transactionReportWriter) {
-
+            FlatFileItemWriter<TransactionReportDto> transactionReportWriter,
+            ObservedStepListener listener) {
         return new StepBuilder("transactionReportStep", jobRepository)
                 .<TransactionReportDto, TransactionReportDto>chunk(10)
                 .reader(transactionReportReader)
                 .writer(transactionReportWriter)
+                .listener(listener)
                 .transactionManager(transactionManager)
                 .build();
     }

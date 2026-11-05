@@ -6,6 +6,8 @@ import static org.mockito.Mockito.when;
 
 import com.qbe.batchstarter.dto.BankAccountDto;
 import com.qbe.batchstarter.entity.BankAccountEntity;
+import com.qbe.batchstarter.listener.ObservedJobListener;
+import com.qbe.batchstarter.listener.ObservedStepListener;
 import com.qbe.batchstarter.properties.BatchProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -53,15 +55,18 @@ class AccountImportJobConfigTest {
         @SuppressWarnings("unchecked")
         ObjectProvider<AsyncTaskExecutor> provider = mock(ObjectProvider.class);
 
-        Step step =
-                config.accountImportStep(mock(JobRepository.class), provider, mock(SynchronizedItemStreamReader.class));
+        Step step = config.accountImportStep(
+                mock(JobRepository.class),
+                provider,
+                mock(SynchronizedItemStreamReader.class),
+                mock(ObservedStepListener.class));
         assertThat(step).isNotNull();
         assertThat(step.getName()).isEqualTo("accountImportStep");
     }
 
     @Test
     void shouldCreateJob() {
-        Job job = config.accountImportJob(mock(JobRepository.class), mock(Step.class));
+        Job job = config.accountImportJob(mock(JobRepository.class), mock(Step.class), mock(ObservedJobListener.class));
         assertThat(job).isNotNull();
         assertThat(job.getName()).isEqualTo("accountImportJob");
     }

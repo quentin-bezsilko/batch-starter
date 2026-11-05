@@ -4,6 +4,7 @@ import com.qbe.batchstarter.dto.CustomerEnrichmentDto;
 import com.qbe.batchstarter.entity.BankAccountEntity;
 import com.qbe.batchstarter.entity.BankTransactionEntity;
 import com.qbe.batchstarter.entity.CustomerEntity;
+import com.qbe.batchstarter.metrics.Monitored;
 import com.qbe.batchstarter.repository.BankAccountRepository;
 import com.qbe.batchstarter.repository.BankTransactionRepository;
 import java.math.BigDecimal;
@@ -20,6 +21,7 @@ public class CustomerEnrichmentProcessor implements ItemProcessor<CustomerEntity
     private final BankTransactionRepository transactionRepository;
 
     @Override
+    @Monitored(name = "customer.enrichment.processor")
     public CustomerEnrichmentDto process(CustomerEntity customer) {
         List<BankAccountEntity> accounts = accountRepository.findByCustomerId(customer.getId());
 

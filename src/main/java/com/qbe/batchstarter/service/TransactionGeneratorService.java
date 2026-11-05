@@ -40,7 +40,8 @@ public class TransactionGeneratorService {
         if (value < transactionGeneratorProperties.cardPaymentRate() + transactionGeneratorProperties.transferRate()) {
             return TransactionType.TRANSFER;
         }
-        if (value < transactionGeneratorProperties.cardPaymentRate()
+        if (value
+                < transactionGeneratorProperties.cardPaymentRate()
                         + transactionGeneratorProperties.transferRate()
                         + transactionGeneratorProperties.directDebitRate()) {
             return TransactionType.DIRECT_DEBIT;

@@ -3,6 +3,7 @@ package com.qbe.batchstarter.batch.fraud;
 import com.qbe.batchstarter.entity.BankTransactionEntity;
 import com.qbe.batchstarter.entity.FraudAlertEntity;
 import com.qbe.batchstarter.enums.FraudType;
+import com.qbe.batchstarter.metrics.Monitored;
 import com.qbe.batchstarter.repository.BankTransactionRepository;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -25,6 +26,7 @@ public class FraudAlertProcessor implements ItemProcessor<BankTransactionEntity,
     private final Map<Long, List<BankTransactionEntity>> accountTransactionsCache = new ConcurrentHashMap<>();
 
     @Override
+    @Monitored(name = "fraud.alert.processor")
     public FraudAlertEntity process(BankTransactionEntity transaction) {
 
         // 1 - Montant de transaction élevé

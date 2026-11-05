@@ -329,15 +329,16 @@ Sprint 7
 ✅ Enrichissement (ok)
 ✅ Détection de fraude (ok)
 ✅ Reporting (ok)
-✅ Prometheus
-✅ Grafana
+✅ Opentelemetry avec profils pour connexion directe à Loki, Prometheus (ok)
+✅ Loki (ok)
+✅ Prometheus (ok)
+✅ Grafana (ok)
 ✅ Endpoint /api/batch/status
 
 Sprint 8 :
-✅ Finaliser les TU (ok)
+✅ Finaliser les TU (Loki, prometheus, opentelemetry et Grafana uniquement)
 ✅ Intégration Sonar
 ✅ Endpoint /api/batch/status
-✅ Loki, Prometheus, Opentelemetry (profils), Grafana
 ✅ README professionnel
 
 TODO :

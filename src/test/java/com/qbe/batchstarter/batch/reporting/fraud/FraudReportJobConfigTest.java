@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
 import com.qbe.batchstarter.dto.FraudReportDto;
+import com.qbe.batchstarter.listener.ObservedStepListener;
 import org.junit.jupiter.api.Test;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.Step;
@@ -22,8 +23,9 @@ class FraudReportJobConfigTest {
         PlatformTransactionManager transactionManager = new ResourcelessTransactionManager();
         ListItemReader<FraudReportDto> reader = mock(ListItemReader.class);
         FlatFileItemWriter<FraudReportDto> writer = mock(FlatFileItemWriter.class);
+        ObservedStepListener listener = mock(ObservedStepListener.class);
 
-        Step step = config.fraudReportStep(jobRepository, transactionManager, reader, writer);
+        Step step = config.fraudReportStep(jobRepository, transactionManager, reader, writer, listener);
         assertThat(step).isNotNull();
         assertThat(step.getName()).isEqualTo("fraudReportStep");
     }
