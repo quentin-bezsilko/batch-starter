@@ -1,7 +1,7 @@
 package com.qbe.batchstarter.bean;
 
-import java.util.Random;
-import java.util.random.RandomGenerator;
+import com.qbe.batchstarter.exception.InvalidRandomException;
+import java.security.SecureRandom;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -9,7 +9,11 @@ import org.springframework.context.annotation.Configuration;
 public class RandomConfiguration {
 
     @Bean
-    public Random random() {
-        return Random.from(RandomGenerator.getDefault());
+    public SecureRandom random() {
+        try {
+            return SecureRandom.getInstanceStrong();
+        } catch (Exception e) {
+            throw new InvalidRandomException("Failed to create SecureRandom instance");
+        }
     }
 }

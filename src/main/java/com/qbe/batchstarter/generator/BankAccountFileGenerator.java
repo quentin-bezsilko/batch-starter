@@ -4,9 +4,9 @@ import com.qbe.batchstarter.dto.BankAccountDto;
 import com.qbe.batchstarter.dto.CustomerDto;
 import com.qbe.batchstarter.properties.AccountGeneratorProperties;
 import com.qbe.batchstarter.service.BankAccountGeneratorService;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +16,7 @@ public class BankAccountFileGenerator {
 
     private final BankAccountGeneratorService bankAccountGeneratorService;
     private final AccountGeneratorProperties accountGeneratorProperties;
-
-    private final Random random = new Random();
+    private final SecureRandom random;
 
     public List<BankAccountDto> generate(List<CustomerDto> customers) {
         List<BankAccountDto> accounts = new ArrayList<>();
@@ -25,10 +24,12 @@ public class BankAccountFileGenerator {
         for (CustomerDto customer : customers) {
             int accountCount = accountCount();
             for (int i = 0; i < accountCount; i++) {
-                String currency = customer.country().equals("UK")
-                        ? "GBP"
-                        : customer.country().equals("US") ? "USD" : "EUR";
-
+                String currency =
+                        switch (customer.country()) {
+                            case "UK" -> "GBP";
+                            case "US" -> "USD";
+                            default -> "EUR";
+                        };
                 accounts.add(
                         bankAccountGeneratorService.generate(accountId++, customer.id(), customer.country(), currency));
             }

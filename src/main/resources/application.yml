@@ -1,6 +1,11 @@
+server:
+  port: ${SERVER_PORT:8080}
+  servlet:
+    context-path: ${SERVER_SERVLET_CONTEXT_PATH:/batchstarter}
+
 spring:
   main:
-    web-application-type: ${SPRING_MAIN_WEB_APPLICATION_TYPE:none}
+    web-application-type: ${SPRING_MAIN_WEB_APPLICATION_TYPE:servlet}
     allow-bean-definition-overriding: ${SPRING_MAIN_ALLOW_BEAN_DEFINITION_OVERRIDING:true}
   application:
     name: ${SPRING_APPLICATION_NAME:batchstarter}
@@ -9,7 +14,7 @@ spring:
       initialize-schema: ${SPRING_BATCH_JDBC_INITIALIZE_SCHEMA:never}
     job:
       name: ${SPRING_BATCH_JOB_NAME:dataWorkflowJob}
-      enable: ${SPRING_BATCH_JOB_ENABLE:true}
+      enabled: ${SPRING_BATCH_JOB_ENABLED:false}
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:oracle:thin:@//localhost:1521/XEPDB1}
     username: ${SPRING_DATASOURCE_USERNAME:batchuser}
@@ -47,7 +52,7 @@ generator:
   transaction-report-file-name: ${GENERATOR_TRANSACTION_REPORT_FILE_NAME:/transaction_report.csv}
   fraud-report-file-name: ${GENERATOR_FRAUD_REPORT_FILE_NAME:/fraud_report.csv}
   customers:
-    count: ${GENERATOR_CUSTOMERS_COUNT:100000}
+    count: ${GENERATOR_CUSTOMERS_COUNT:50000}
     min-age: ${GENERATOR_CUSTOMERS_MIN_AGE:18}
     max-age: ${GENERATOR_CUSTOMERS_MAX_AGE:80}
     minor-rate: ${GENERATOR_CUSTOMERS_MINOR_RATE:10}
@@ -68,7 +73,7 @@ generator:
     max-balance: ${GENERATOR_ACCOUNTS_MAX_BALANCE:50000}
     max-opening-age-in-days: ${GENERATOR_ACCOUNTS_MAX_OPENING_AGE_IN_DAYS:3650}
   transactions:
-    count: ${GENERATOR_TRANSACTIONS_COUNT:1000000}
+    count: ${GENERATOR_TRANSACTIONS_COUNT:500000}
     card-payment-rate: ${GENERATOR_TRANSACTIONS_CARD_PAYMENT_RATE:80}
     transfer-rate: ${GENERATOR_TRANSACTIONS_TRANSFER_RATE:10}
     direct-debit-rate: ${GENERATOR_TRANSACTIONS_DIRECT_DEBIT_RATE:5}

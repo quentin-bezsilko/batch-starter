@@ -3,8 +3,8 @@ package com.qbe.batchstarter.service;
 import com.qbe.batchstarter.dto.CountryReference;
 import com.qbe.batchstarter.dto.CustomerDto;
 import com.qbe.batchstarter.properties.CustomerGeneratorProperties;
+import java.security.SecureRandom;
 import java.time.LocalDate;
-import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,8 +14,7 @@ public class CustomerGeneratorService {
 
     private final RandomReferenceService referenceService;
     private final CustomerGeneratorProperties properties;
-
-    private final Random random = new Random();
+    private final SecureRandom random;
 
     public CustomerDto generate(long id) {
         CountryReference country = referenceService.randomCountry();

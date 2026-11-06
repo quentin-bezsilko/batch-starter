@@ -2,6 +2,7 @@ package com.qbe.batchstarter.batch.importer.account;
 
 import com.qbe.batchstarter.dto.BankAccountDto;
 import com.qbe.batchstarter.entity.BankAccountEntity;
+import com.qbe.batchstarter.exception.IntentionalCrashException;
 import com.qbe.batchstarter.exception.InvalidBankAccountException;
 import com.qbe.batchstarter.exception.TemporaryException;
 import com.qbe.batchstarter.mapper.BankAccountMapper;
@@ -35,7 +36,7 @@ public class AccountProcessor implements ItemProcessor<BankAccountDto, BankAccou
     public BankAccountEntity process(@NonNull BankAccountDto item) {
         int processedLong = processed.incrementAndGet();
         if (accountGeneratorProperties.crashAfter() > 0 && processedLong == accountGeneratorProperties.crashAfter()) {
-            throw new RuntimeException("Crash volontaire");
+            throw new IntentionalCrashException("Crash volontaire");
         }
         if (generatorProperties.simulateRetry() && retryDone.compareAndSet(false, true)) {
             log.info("Erreur temporaire simulée for item with id={}", item.id());

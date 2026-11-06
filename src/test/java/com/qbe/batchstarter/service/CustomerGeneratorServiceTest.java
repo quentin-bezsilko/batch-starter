@@ -7,10 +7,13 @@ import static org.mockito.Mockito.when;
 import com.qbe.batchstarter.dto.CountryReference;
 import com.qbe.batchstarter.dto.CustomerDto;
 import com.qbe.batchstarter.properties.CustomerGeneratorProperties;
+import java.security.SecureRandom;
 import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
 
-public class CustomerGeneratorServiceTest {
+class CustomerGeneratorServiceTest {
+
+    private final SecureRandom random = mock(SecureRandom.class);
 
     @Test
     void shouldGenerateCustomer() {
@@ -23,7 +26,7 @@ public class CustomerGeneratorServiceTest {
         when(properties.minAge()).thenReturn(18);
         when(properties.maxAge()).thenReturn(80);
 
-        CustomerGeneratorService service = new CustomerGeneratorService(referenceService, properties);
+        CustomerGeneratorService service = new CustomerGeneratorService(referenceService, properties, random);
         CustomerDto customer = service.generate(1L);
 
         assertThat(customer.id()).isEqualTo(1L);

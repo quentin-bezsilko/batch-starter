@@ -23,7 +23,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
 
-public class AccountProcessorTest {
+class AccountProcessorTest {
 
     @Test
     void shouldMapAndAssignCustomer() {

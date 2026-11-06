@@ -2,8 +2,8 @@ package com.qbe.batchstarter.service;
 
 import com.qbe.batchstarter.dto.CountryReference;
 import com.qbe.batchstarter.dto.MerchantReference;
+import java.security.SecureRandom;
 import java.util.List;
-import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 public class RandomReferenceService {
 
     private final ReferenceDataService referenceDataService;
-    private final Random random = new Random();
+    private final SecureRandom random;
 
     public CountryReference randomCountry() {
         List<CountryReference> countries = referenceDataService.getCountries();

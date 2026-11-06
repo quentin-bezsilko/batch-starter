@@ -10,11 +10,14 @@ import com.qbe.batchstarter.enums.AccountType;
 import com.qbe.batchstarter.properties.AccountGeneratorProperties;
 import com.qbe.batchstarter.service.BankAccountGeneratorService;
 import java.math.BigDecimal;
+import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
 class BankAccountFileGeneratorTest {
+
+    private final SecureRandom random = mock(SecureRandom.class);
 
     @Test
     void shouldGenerateAccountsForCustomers() {
@@ -35,7 +38,7 @@ class BankAccountFileGeneratorTest {
                         AccountStatus.ACTIVE,
                         LocalDate.now()));
 
-        BankAccountFileGenerator generator = new BankAccountFileGenerator(service, properties);
+        BankAccountFileGenerator generator = new BankAccountFileGenerator(service, properties, random);
 
         List<CustomerDto> customers = List.of(
                 new CustomerDto(1L, "John", "Doe", LocalDate.now(), "FR"),

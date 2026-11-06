@@ -9,7 +9,7 @@ import com.qbe.batchstarter.properties.GeneratorProperties;
 import org.junit.jupiter.api.Test;
 import org.springframework.batch.infrastructure.item.file.FlatFileItemReader;
 
-public class AccountReaderConfigTest {
+class AccountReaderConfigTest {
 
     @Test
     void shouldCreateReader() {

@@ -74,7 +74,7 @@ public class BankAccountGeneratorService {
             log.info("Generating empty IBAN for accountId={}", accountId);
             return "";
         }
-        long accountNumber = Math.abs(random.nextLong()) % IBAN_MAX_VALUE;
+        long accountNumber = random.nextLong(IBAN_MAX_VALUE);
         return country + (IBAN_KEY_MIN + random.nextInt(IBAN_KEY_MAX)) + String.format("%020d", accountNumber);
     }
 }

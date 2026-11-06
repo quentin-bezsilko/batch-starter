@@ -47,7 +47,7 @@ class BankAccountGeneratorServiceTest {
 
     @Test
     void shouldGenerateAccount() {
-        when(random.nextLong()).thenReturn(123456789L);
+        when(random.nextLong(1_000_000_000_000_000_000L)).thenReturn(123456789L);
         when(random.nextInt(90)).thenReturn(10);
         when(random.nextInt(100))
                 .thenReturn(10) // type
@@ -127,11 +127,10 @@ class BankAccountGeneratorServiceTest {
 
     @Test
     void shouldGenerateIban() {
-        when(random.nextLong()).thenReturn(123456789L);
+        when(random.nextLong(1_000_000_000_000_000_000L)).thenReturn(123456789L);
         when(random.nextInt(90)).thenReturn(10);
 
         String iban = service.generateIban(1L, "FR");
-        assertThat(iban).startsWith("FR");
-        assertThat(iban).isNotEmpty();
+        assertThat(iban).startsWith("FR").isNotEmpty();
     }
 }

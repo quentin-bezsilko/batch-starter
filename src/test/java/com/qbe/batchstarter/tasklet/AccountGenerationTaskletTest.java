@@ -18,7 +18,7 @@ import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.StepContribution;
 import org.springframework.batch.infrastructure.repeat.RepeatStatus;
 
-public class AccountGenerationTaskletTest {
+class AccountGenerationTaskletTest {
 
     @Test
     void shouldGenerateAccounts() throws Exception {

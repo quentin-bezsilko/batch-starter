@@ -8,7 +8,7 @@ import jakarta.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.Test;
 import org.springframework.batch.infrastructure.item.database.JpaItemWriter;
 
-public class AccountWriterConfigTest {
+class AccountWriterConfigTest {
 
     @Test
     void shouldCreateJpaWriter() {

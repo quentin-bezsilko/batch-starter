@@ -12,12 +12,15 @@ import com.qbe.batchstarter.enums.TransactionType;
 import com.qbe.batchstarter.service.RandomReferenceService;
 import com.qbe.batchstarter.service.TransactionGeneratorService;
 import java.math.BigDecimal;
+import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
 class BankTransactionFileGeneratorTest {
+
+    private final SecureRandom random = mock(SecureRandom.class);
 
     @Test
     void shouldGenerateTransactions() {
@@ -39,7 +42,8 @@ class BankTransactionFileGeneratorTest {
                         "EUR",
                         TransactionStatus.COMPLETED));
 
-        BankTransactionFileGenerator generator = new BankTransactionFileGenerator(transactionService, referenceService);
+        BankTransactionFileGenerator generator =
+                new BankTransactionFileGenerator(transactionService, referenceService, random);
         List<BankTransactionDto> transactions = generator.generate(List.of(account), 10);
 
         assertThat(transactions).hasSize(10);
@@ -54,10 +58,30 @@ class BankTransactionFileGeneratorTest {
 
         BankAccountDto invalidAccount = new BankAccountDto(
                 1L, 1L, "", AccountType.CHECKING, "EUR", BigDecimal.TEN, AccountStatus.ACTIVE, LocalDate.now());
-        BankTransactionFileGenerator generator = new BankTransactionFileGenerator(transactionService, referenceService);
+        BankTransactionFileGenerator generator =
+                new BankTransactionFileGenerator(transactionService, referenceService, random);
+        List<BankAccountDto> invalidAccounts = List.of(invalidAccount);
 
-        assertThatThrownBy(() -> generator.generate(List.of(invalidAccount), 1))
-                .isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> generator.generate(invalidAccounts, 1)).isInstanceOf(IllegalArgumentException.class);
         verifyNoInteractions(transactionService);
+    }
+
+    @Test
+    void shouldThrowExceptionWhenNoValidAccountExists() {
+        TransactionGeneratorService transactionService = mock(TransactionGeneratorService.class);
+        RandomReferenceService referenceService = mock(RandomReferenceService.class);
+
+        BankAccountDto invalidAccount = new BankAccountDto(
+                1L, 1L, "", AccountType.CHECKING, "EUR", BigDecimal.TEN, AccountStatus.ACTIVE, LocalDate.now());
+        BankTransactionFileGenerator generator =
+                new BankTransactionFileGenerator(transactionService, referenceService, random);
+        List<BankAccountDto> invalidAccounts = List.of(invalidAccount);
+
+        assertThatThrownBy(() -> generator.generate(invalidAccounts, 1))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("No valid accounts available to generate transactions");
+
+        verifyNoInteractions(transactionService);
+        verifyNoInteractions(referenceService);
     }
 }
